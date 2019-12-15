@@ -1,8 +1,13 @@
+import React, { useState } from 'react';
 import Layout from "../components/AppLayout";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, FormText, Alert } from 'reactstrap';
 import Link from "next/link";
 import axios from "axios";
+import Router from 'next/router';
+
+var bcrypt = require('bcryptjs');
+var salt = bcrypt.genSaltSync(10);
 
 class Registration extends React.Component{
     constructor(props) {
@@ -11,8 +16,9 @@ class Registration extends React.Component{
             nameSurname: '',
             email: '',
             password: '',
-            passwordConfirm: ''
-        }
+            passwordConfirm: '',
+            alertMessage: ''
+        };
         this.handleRegistration = this.handleRegistration.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
     }
@@ -28,24 +34,24 @@ class Registration extends React.Component{
     handleRegistration(){
         const apiConfig = require('../api-config');
         const url = apiConfig.serverUrl + '/user';
-        console.log('Here with url: ' + url);
         if (this.state.password !== this.state.passwordConfirm){
-            console.log('Is ' + this.state.password + ' same as ' + this.state.passwordConfirm + ' ?');
             document.getElementById('password-confirm').style.border = '1px solid red';
             return;
         }
+        var pass = bcrypt.hashSync(this.state.password, salt);
         axios.post(url, {
             nameSurname: this.state.nameSurname,
             email: this.state.email,
-            password: this.state.password
+            password: pass
         })
             .then(function (response) {
-                console.log(response);
+                Router.push('/login?registered=true');
             })
             .catch(function (error) {
-                console.log(error);
-            });
-
+                this.setState({
+                    alertMessage: error.response.data.message
+                });
+            }.bind(this));
     }
     render() {
         return (
@@ -53,6 +59,12 @@ class Registration extends React.Component{
                 <div className="container bg-white" style={{ padding:'3%', marginTop:'3%'}}>
                     <div className="row justify-content-md-center">
                         <div className="col-md-4">
+                            { this.state.alertMessage.length > 0 ?
+                            <Alert color="danger">
+                                {this.state.alertMessage}
+                            </Alert>
+                                : ''
+                            }
                             <h2 className="text-light bg-dark text-center rounded p-2"> Kayıt Olun </h2>
                             <hr/>
                             <Form>

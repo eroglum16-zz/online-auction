@@ -88,10 +88,21 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ({
+
+/***/ "./api-config.js":
+/*!***********************!*\
+  !*** ./api-config.js ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+exports.serverUrl = 'http://localhost:3030';
+
+/***/ }),
 
 /***/ "./components/AppLayout.js":
 /*!*********************************!*\
@@ -2113,30 +2124,83 @@ module.exports = __webpack_require__(/*! ./dist/client/link */ "./node_modules/n
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_AppLayout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/AppLayout */ "./components/AppLayout.js");
-/* harmony import */ var _node_modules_bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../node_modules/bootstrap/dist/css/bootstrap.min.css */ "./node_modules/bootstrap/dist/css/bootstrap.min.css");
-/* harmony import */ var _node_modules_bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! reactstrap */ "reactstrap");
-/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(reactstrap__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! next/link */ "./node_modules/next/link.js");
-/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _components_AppLayout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/AppLayout */ "./components/AppLayout.js");
+/* harmony import */ var _node_modules_bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../node_modules/bootstrap/dist/css/bootstrap.min.css */ "./node_modules/bootstrap/dist/css/bootstrap.min.css");
+/* harmony import */ var _node_modules_bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! reactstrap */ "reactstrap");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(reactstrap__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! next/link */ "./node_modules/next/link.js");
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! next/router */ "next/router");
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(next_router__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! isomorphic-unfetch */ "isomorphic-unfetch");
+/* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! axios */ "axios");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_7__);
 var _jsxFileName = "/Users/mert/Desktop/I\u0307TU\u0308/Fall 2019/Bitirme/Project/pages/login.js";
-
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
-
+var __jsx = react__WEBPACK_IMPORTED_MODULE_6___default.a.createElement;
 
 
 
 
-class Login extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
+
+
+
+
+
+class Login extends react__WEBPACK_IMPORTED_MODULE_6___default.a.Component {
+  constructor(props) {
+    super(props);
+    const message = this.props.registered ? 'Kaydınız oluşturuldu, lütfen giriş yapın!' : '';
+    const color = this.props.registered ? 'success' : '';
+    this.state = {
+      alert: {
+        message: message,
+        color: color
+      },
+      email: '',
+      password: ''
+    };
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+  }
+
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.setState({
+      [name]: value
+    });
+  }
+
+  handleLogin() {
+    const apiConfig = __webpack_require__(/*! ../api-config */ "./api-config.js");
+
+    const url = apiConfig.serverUrl + '/authenticate';
+    axios__WEBPACK_IMPORTED_MODULE_7___default.a.post(url, {
+      email: this.state.email,
+      password: this.state.password
+    }).then(function (response) {
+      next_router__WEBPACK_IMPORTED_MODULE_4___default.a.push('/index');
+    }).catch(function (error) {
+      this.setState({
+        alert: {
+          message: error.response.data.message,
+          color: 'danger'
+        }
+      });
+    }.bind(this));
+  }
+
   render() {
-    return __jsx(_components_AppLayout__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    return __jsx(_components_AppLayout__WEBPACK_IMPORTED_MODULE_0__["default"], {
       page: "login",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 9
+        lineNumber: 59
       },
       __self: this
     }, __jsx("div", {
@@ -2147,129 +2211,141 @@ class Login extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 10
+        lineNumber: 60
       },
       __self: this
     }, __jsx("div", {
       className: "row justify-content-md-center",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 11
+        lineNumber: 61
       },
       __self: this
     }, __jsx("div", {
       className: "col-md-4",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 12
+        lineNumber: 62
       },
       __self: this
-    }, __jsx("h2", {
+    }, this.state.alert.message.length > 0 ? __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Alert"], {
+      color: this.state.alert.color,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 64
+      },
+      __self: this
+    }, this.state.alert.message) : '', __jsx("h2", {
       className: "text-light bg-dark text-center rounded p-2",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 13
+        lineNumber: 69
       },
       __self: this
     }, " Giri\u015F Yap\u0131n "), __jsx("hr", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 14
+        lineNumber: 70
       },
       __self: this
-    }), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["Form"], {
+    }), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Form"], {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 15
+        lineNumber: 71
       },
       __self: this
-    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["FormGroup"], {
+    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_2__["FormGroup"], {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 16
+        lineNumber: 72
       },
       __self: this
-    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["Input"], {
+    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Input"], {
       bsSize: "lg",
       type: "email",
       name: "email",
+      value: this.state.email,
+      onChange: this.handleInputChange,
       id: "email",
       placeholder: "Kay\u0131tl\u0131 email adresiniz",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 17
+        lineNumber: 73
       },
       __self: this
-    })), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["FormGroup"], {
+    })), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_2__["FormGroup"], {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 19
+        lineNumber: 81
       },
       __self: this
-    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["Input"], {
+    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Input"], {
       bsSize: "lg",
       type: "password",
       name: "password",
+      value: this.state.password,
+      onChange: this.handleInputChange,
       id: "password",
-      placeholder: "Hesap parolan\u0131z",
+      placeholder: "Parolan\u0131z",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 20
+        lineNumber: 82
       },
       __self: this
     })), __jsx("p", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 22
+        lineNumber: 90
       },
       __self: this
-    }, __jsx(next_link__WEBPACK_IMPORTED_MODULE_4___default.a, {
+    }, __jsx(next_link__WEBPACK_IMPORTED_MODULE_3___default.a, {
       href: '/forget-password',
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 23
+        lineNumber: 91
       },
       __self: this
     }, __jsx("a", {
       className: "text-dark ",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 24
+        lineNumber: 92
       },
       __self: this
-    }, " Parolam\u0131 unuttum"))), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+    }, " Parolam\u0131 unuttum"))), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
       color: "secondary",
       size: "lg",
+      onClick: this.handleLogin,
       block: true,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 27
+        lineNumber: 95
       },
       __self: this
-    }, "Giri\u015F Yap")), __jsx("hr", {
+    }, "Kayd\u0131 Tamamla")), __jsx("hr", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 29
+        lineNumber: 102
       },
       __self: this
     }), __jsx("p", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 30
+        lineNumber: 103
       },
       __self: this
-    }, "Hesab\u0131n\u0131z yok mu?", __jsx(next_link__WEBPACK_IMPORTED_MODULE_4___default.a, {
+    }, "Hesab\u0131n\u0131z yok mu?", __jsx(next_link__WEBPACK_IMPORTED_MODULE_3___default.a, {
       href: '/registration',
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 31
+        lineNumber: 104
       },
       __self: this
     }, __jsx("a", {
       className: "text-dark",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 32
+        lineNumber: 105
       },
       __self: this
     }, " \xDCye olun")))))));
@@ -2277,11 +2353,20 @@ class Login extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
 
 }
 
+Login.getInitialProps = async function (context) {
+  const {
+    registered
+  } = context.query;
+  return {
+    registered
+  };
+};
+
 /* harmony default export */ __webpack_exports__["default"] = (Login);
 
 /***/ }),
 
-/***/ 3:
+/***/ 5:
 /*!******************************!*\
   !*** multi ./pages/login.js ***!
   \******************************/
@@ -2312,6 +2397,17 @@ module.exports = require("@fortawesome/free-solid-svg-icons");
 /***/ (function(module, exports) {
 
 module.exports = require("@fortawesome/react-fontawesome");
+
+/***/ }),
+
+/***/ "axios":
+/*!************************!*\
+  !*** external "axios" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("axios");
 
 /***/ }),
 
@@ -2389,6 +2485,28 @@ module.exports = require("core-js/library/fn/object/keys");
 /***/ (function(module, exports) {
 
 module.exports = require("core-js/library/fn/promise");
+
+/***/ }),
+
+/***/ "isomorphic-unfetch":
+/*!*************************************!*\
+  !*** external "isomorphic-unfetch" ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("isomorphic-unfetch");
+
+/***/ }),
+
+/***/ "next/router":
+/*!******************************!*\
+  !*** external "next/router" ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("next/router");
 
 /***/ }),
 
