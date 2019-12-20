@@ -88,10 +88,26 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ({
+
+/***/ "./api-config.js":
+/*!***********************!*\
+  !*** ./api-config.js ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+exports.serverUrl = 'http://localhost:3030';
+exports.defaultCity = {
+  city: "İzmir",
+  code: 35,
+  districts: ["Aliağa", "Bayındır", "Bergama", "Bornova", "Çeşme", "Dikili", "Foça", "Karaburun", "Karşıyaka", "Kemalpaşa", "Kınık", "Kiraz", "Menemen", "Ödemiş", "Seferihisar", "Selçuk", "Tire", "Torbalı", "Urla", "Beydağ", "Buca", "Konak", "Menderes", "Balçova", "Çiğli", "Gaziemir", "Narlıdere", "Güzelbahçe", "Bayraklı", "Karabağlar"]
+};
+
+/***/ }),
 
 /***/ "./components/AppLayout.js":
 /*!*********************************!*\
@@ -124,6 +140,8 @@ class Layout extends react__WEBPACK_IMPORTED_MODULE_1___default.a.Component {
       __self: this
     }, __jsx(_NavigationBar__WEBPACK_IMPORTED_MODULE_0__["default"], {
       page: this.props.page,
+      loggedIn: this.props.loggedIn,
+      user: this.props.user,
       __source: {
         fileName: _jsxFileName,
         lineNumber: 8
@@ -314,9 +332,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fortawesome/free-solid-svg-icons */ "@fortawesome/free-solid-svg-icons");
 /* harmony import */ var _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _utils_auth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/auth */ "./utils/auth.js");
 var _jsxFileName = "/Users/mert/Desktop/I\u0307TU\u0308/Fall 2019/Bitirme/Project/components/NavigationBar.js";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
 
 
 
@@ -328,12 +348,17 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
     this.state = {
       isOpen: false
     };
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen
     });
+  }
+
+  handleLogout() {
+    Object(_utils_auth__WEBPACK_IMPORTED_MODULE_4__["logout"])();
   }
 
   render() {
@@ -347,14 +372,14 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 37
+        lineNumber: 41
       },
       __self: this
     }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["NavbarBrand"], {
       href: "/",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 38
+        lineNumber: 42
       },
       __self: this
     }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__["FontAwesomeIcon"], {
@@ -362,14 +387,14 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 38
+        lineNumber: 42
       },
       __self: this
     }), " A\xE7\u0131k Artt\u0131rma"), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["NavbarToggler"], {
       onClick: this.toggle,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 39
+        lineNumber: 43
       },
       __self: this
     }), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Collapse"], {
@@ -377,7 +402,7 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       navbar: true,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 40
+        lineNumber: 44
       },
       __self: this
     }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Nav"], {
@@ -385,13 +410,13 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       navbar: true,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 41
+        lineNumber: 45
       },
       __self: this
     }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["NavItem"], {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 42
+        lineNumber: 46
       },
       __self: this
     }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["NavLink"], {
@@ -399,7 +424,7 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       href: "/",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 43
+        lineNumber: 47
       },
       __self: this
     }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__["FontAwesomeIcon"], {
@@ -407,13 +432,13 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 44
+        lineNumber: 48
       },
       __self: this
-    }), " Anasayfa")), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["NavItem"], {
+    }), " Anasayfa")), this.props.loggedIn ? '' : __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["NavItem"], {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 47
+        lineNumber: 52
       },
       __self: this
     }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["NavLink"], {
@@ -421,7 +446,7 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       href: "/registration",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 48
+        lineNumber: 53
       },
       __self: this
     }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__["FontAwesomeIcon"], {
@@ -429,13 +454,13 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 49
+        lineNumber: 54
       },
       __self: this
-    }), " Kay\u0131t")), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["NavItem"], {
+    }), " Kay\u0131t")), this.props.loggedIn ? '' : __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["NavItem"], {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 52
+        lineNumber: 59
       },
       __self: this
     }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["NavLink"], {
@@ -443,7 +468,7 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       href: "/login",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 53
+        lineNumber: 60
       },
       __self: this
     }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__["FontAwesomeIcon"], {
@@ -451,16 +476,38 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 53
+        lineNumber: 60
       },
       __self: this
-    }), " Giri\u015F")), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["NavItem"], {
+    }), " Giri\u015F")), this.props.loggedIn ? __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["NavItem"], {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 64
+      },
+      __self: this
+    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["NavLink"], {
+      className: this.props.page === "sell" ? "active" : "",
+      href: "/sell",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 65
+      },
+      __self: this
+    }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__["FontAwesomeIcon"], {
+      icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__["faClipboard"],
+      width: "16",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 65
+      },
+      __self: this
+    }), " Sat\u0131\u015F Ba\u015Flat")) : '', __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["NavItem"], {
       style: {
         marginLeft: '10px'
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 55
+        lineNumber: 68
       },
       __self: this
     }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Input"], {
@@ -470,15 +517,15 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       placeholder: "arama yap\u0131n...",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 56
+        lineNumber: 69
       },
       __self: this
-    })), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["UncontrolledDropdown"], {
+    })), this.props.loggedIn ? __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["UncontrolledDropdown"], {
       nav: true,
       inNavbar: true,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 63
+        lineNumber: 77
       },
       __self: this
     }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["DropdownToggle"], {
@@ -486,7 +533,7 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       caret: true,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 64
+        lineNumber: 78
       },
       __self: this
     }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__["FontAwesomeIcon"], {
@@ -494,21 +541,21 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 65
+        lineNumber: 79
       },
       __self: this
-    }), " Mert Ero\u011Flu"), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["DropdownMenu"], {
+    }), " ", this.props.user.nameSurname ? this.props.user.nameSurname : ''), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["DropdownMenu"], {
       right: true,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 67
+        lineNumber: 81
       },
       __self: this
     }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["DropdownItem"], {
       href: "/sales",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 68
+        lineNumber: 82
       },
       __self: this
     }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__["FontAwesomeIcon"], {
@@ -516,14 +563,14 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 69
+        lineNumber: 83
       },
       __self: this
     }), " Sat\u0131lanlar"), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["DropdownItem"], {
       href: "/purchases",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 71
+        lineNumber: 85
       },
       __self: this
     }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__["FontAwesomeIcon"], {
@@ -531,20 +578,21 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 72
+        lineNumber: 86
       },
       __self: this
     }), " Al\u0131nanlar"), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["DropdownItem"], {
       divider: true,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 74
+        lineNumber: 88
       },
       __self: this
     }), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["DropdownItem"], {
+      onClick: this.handleLogout,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 75
+        lineNumber: 89
       },
       __self: this
     }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__["FontAwesomeIcon"], {
@@ -552,15 +600,26 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 76
+        lineNumber: 90
       },
       __self: this
-    }), " \xC7\u0131k\u0131\u015F Yap"))))));
+    }), " \xC7\u0131k\u0131\u015F Yap"))) : '')));
   }
 
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (NavigationBar);
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/core-js/date/now.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/core-js/date/now.js ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! core-js/library/fn/date/now */ "core-js/library/fn/date/now");
 
 /***/ }),
 
@@ -736,6 +795,184 @@ module.exports = _interopRequireWildcard;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
+
+
+/***/ }),
+
+/***/ "./node_modules/js-cookie/src/js.cookie.js":
+/*!*************************************************!*\
+  !*** ./node_modules/js-cookie/src/js.cookie.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * JavaScript Cookie v2.2.1
+ * https://github.com/js-cookie/js-cookie
+ *
+ * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
+ * Released under the MIT license
+ */
+;(function (factory) {
+	var registeredInModuleLoader;
+	if (true) {
+		!(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+				__WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		registeredInModuleLoader = true;
+	}
+	if (true) {
+		module.exports = factory();
+		registeredInModuleLoader = true;
+	}
+	if (!registeredInModuleLoader) {
+		var OldCookies = window.Cookies;
+		var api = window.Cookies = factory();
+		api.noConflict = function () {
+			window.Cookies = OldCookies;
+			return api;
+		};
+	}
+}(function () {
+	function extend () {
+		var i = 0;
+		var result = {};
+		for (; i < arguments.length; i++) {
+			var attributes = arguments[ i ];
+			for (var key in attributes) {
+				result[key] = attributes[key];
+			}
+		}
+		return result;
+	}
+
+	function decode (s) {
+		return s.replace(/(%[0-9A-Z]{2})+/g, decodeURIComponent);
+	}
+
+	function init (converter) {
+		function api() {}
+
+		function set (key, value, attributes) {
+			if (typeof document === 'undefined') {
+				return;
+			}
+
+			attributes = extend({
+				path: '/'
+			}, api.defaults, attributes);
+
+			if (typeof attributes.expires === 'number') {
+				attributes.expires = new Date(new Date() * 1 + attributes.expires * 864e+5);
+			}
+
+			// We're using "expires" because "max-age" is not supported by IE
+			attributes.expires = attributes.expires ? attributes.expires.toUTCString() : '';
+
+			try {
+				var result = JSON.stringify(value);
+				if (/^[\{\[]/.test(result)) {
+					value = result;
+				}
+			} catch (e) {}
+
+			value = converter.write ?
+				converter.write(value, key) :
+				encodeURIComponent(String(value))
+					.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+
+			key = encodeURIComponent(String(key))
+				.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent)
+				.replace(/[\(\)]/g, escape);
+
+			var stringifiedAttributes = '';
+			for (var attributeName in attributes) {
+				if (!attributes[attributeName]) {
+					continue;
+				}
+				stringifiedAttributes += '; ' + attributeName;
+				if (attributes[attributeName] === true) {
+					continue;
+				}
+
+				// Considers RFC 6265 section 5.2:
+				// ...
+				// 3.  If the remaining unparsed-attributes contains a %x3B (";")
+				//     character:
+				// Consume the characters of the unparsed-attributes up to,
+				// not including, the first %x3B (";") character.
+				// ...
+				stringifiedAttributes += '=' + attributes[attributeName].split(';')[0];
+			}
+
+			return (document.cookie = key + '=' + value + stringifiedAttributes);
+		}
+
+		function get (key, json) {
+			if (typeof document === 'undefined') {
+				return;
+			}
+
+			var jar = {};
+			// To prevent the for loop in the first place assign an empty array
+			// in case there are no cookies at all.
+			var cookies = document.cookie ? document.cookie.split('; ') : [];
+			var i = 0;
+
+			for (; i < cookies.length; i++) {
+				var parts = cookies[i].split('=');
+				var cookie = parts.slice(1).join('=');
+
+				if (!json && cookie.charAt(0) === '"') {
+					cookie = cookie.slice(1, -1);
+				}
+
+				try {
+					var name = decode(parts[0]);
+					cookie = (converter.read || converter)(cookie, name) ||
+						decode(cookie);
+
+					if (json) {
+						try {
+							cookie = JSON.parse(cookie);
+						} catch (e) {}
+					}
+
+					jar[name] = cookie;
+
+					if (key === name) {
+						break;
+					}
+				} catch (e) {}
+			}
+
+			return key ? jar[key] : jar;
+		}
+
+		api.set = set;
+		api.get = function (key) {
+			return get(key, false /* read as raw */);
+		};
+		api.getJSON = function (key) {
+			return get(key, true /* read as json */);
+		};
+		api.remove = function (key, attributes) {
+			set(key, '', extend(attributes, {
+				expires: -1
+			}));
+		};
+
+		api.defaults = {};
+
+		api.withConverter = init;
+
+		return api;
+	}
+
+	return init(function () {});
+}));
 
 
 /***/ }),
@@ -2278,6 +2515,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../node_modules/bootstrap/dist/css/bootstrap.min.css */ "./node_modules/bootstrap/dist/css/bootstrap.min.css");
 /* harmony import */ var _node_modules_bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _components_ItemCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/ItemCard */ "./components/ItemCard.js");
+/* harmony import */ var _utils_auth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/auth */ "./utils/auth.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "axios");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_5__);
 var _jsxFileName = "/Users/mert/Desktop/I\u0307TU\u0308/Fall 2019/Bitirme/Project/pages/index.js";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -2285,13 +2525,44 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 
+
+
 class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
+  constructor(props) {
+    super(props);
+    var token = this.props.token;
+    this.getUser(token);
+    this.state = {
+      loggedIn: token ? true : false,
+      user: {}
+    };
+  }
+
+  getUser(token) {
+    const apiConfig = __webpack_require__(/*! ../api-config */ "./api-config.js");
+
+    const url = apiConfig.serverUrl + '/user/get';
+    axios__WEBPACK_IMPORTED_MODULE_5___default.a.post(url, {}, {
+      headers: {
+        authorization: token
+      }
+    }).then(response => {
+      this.setState({
+        user: response.data.user
+      });
+    }).catch(function (error) {
+      console.log(error);
+    }.bind(this));
+  }
+
   render() {
     return __jsx(_components_AppLayout__WEBPACK_IMPORTED_MODULE_1__["default"], {
       page: "home",
+      user: this.state.user,
+      loggedIn: this.state.loggedIn,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 8
+        lineNumber: 36
       },
       __self: this
     }, __jsx("div", {
@@ -2302,19 +2573,19 @@ class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 9
+        lineNumber: 37
       },
       __self: this
     }, __jsx("h2", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 10
+        lineNumber: 38
       },
       __self: this
-    }, " Online A\xE7\u0131k Artt\u0131rma Uygulamas\u0131 "), __jsx("hr", {
+    }, " Online A\xE7\u0131k Artt\u0131rma Uygulamas\u0131"), __jsx("hr", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 11
+        lineNumber: 39
       },
       __self: this
     }), __jsx("p", {
@@ -2325,20 +2596,20 @@ class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 12
+        lineNumber: 40
       },
       __self: this
     }, "\xDCr\xFCnlerinizi platformumuzda a\xE7\u0131k artt\u0131rmaya sunabilir, veya aktif a\xE7\u0131k artt\u0131rmalara kat\u0131larak de\u011Ferli \xFCr\xFCnleri alma f\u0131rsat\u0131 yakalayabilirsiniz. A\u015Fa\u011F\u0131daki \xFCr\xFCnlerden ilginizi \xE7ekeni se\xE7erek sat\u0131\u015Fa giderseniz teklifte bulunabilirsiniz."), __jsx("hr", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 17
+        lineNumber: 45
       },
       __self: this
     }), __jsx("div", {
       className: "row",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 18
+        lineNumber: 46
       },
       __self: this
     }, __jsx(_components_ItemCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -2347,7 +2618,7 @@ class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       image: "/piano.jpg",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 19
+        lineNumber: 47
       },
       __self: this
     }), __jsx(_components_ItemCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -2356,7 +2627,7 @@ class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       image: "/cleaner.jpg",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 22
+        lineNumber: 50
       },
       __self: this
     }), __jsx(_components_ItemCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -2365,7 +2636,7 @@ class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       image: "/art.jpg",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 25
+        lineNumber: 53
       },
       __self: this
     }), __jsx(_components_ItemCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -2374,7 +2645,7 @@ class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       image: "/apple-watch.jpeg",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 28
+        lineNumber: 56
       },
       __self: this
     }), __jsx(_components_ItemCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -2383,7 +2654,7 @@ class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       image: "/wand.png",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 31
+        lineNumber: 59
       },
       __self: this
     }), __jsx(_components_ItemCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -2392,7 +2663,7 @@ class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       image: "/ring.jpeg",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 34
+        lineNumber: 62
       },
       __self: this
     }), __jsx(_components_ItemCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -2401,7 +2672,7 @@ class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       image: "/time-machine.jpg",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 37
+        lineNumber: 65
       },
       __self: this
     }), __jsx(_components_ItemCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -2410,7 +2681,7 @@ class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       image: "/titanic.jpg",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 40
+        lineNumber: 68
       },
       __self: this
     }))));
@@ -2418,11 +2689,86 @@ class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
 
 }
 
+Index.getInitialProps = async ctx => {
+  // Check user's session
+  const token = Object(_utils_auth__WEBPACK_IMPORTED_MODULE_4__["getToken"])(ctx);
+  return {
+    token
+  };
+};
+
 /* harmony default export */ __webpack_exports__["default"] = (Index);
 
 /***/ }),
 
-/***/ 3:
+/***/ "./utils/auth.js":
+/*!***********************!*\
+  !*** ./utils/auth.js ***!
+  \***********************/
+/*! exports provided: login, auth, getToken, logout */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "login", function() { return login; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "auth", function() { return auth; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getToken", function() { return getToken; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "logout", function() { return logout; });
+/* harmony import */ var _babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/date/now */ "./node_modules/@babel/runtime-corejs2/core-js/date/now.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/router */ "next/router");
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_router__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var next_cookies__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! next-cookies */ "next-cookies");
+/* harmony import */ var next_cookies__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(next_cookies__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _node_modules_js_cookie__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../node_modules/js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
+/* harmony import */ var _node_modules_js_cookie__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_js_cookie__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+const login = ({
+  token
+}) => {
+  _node_modules_js_cookie__WEBPACK_IMPORTED_MODULE_3___default.a.set('token', token, {
+    expires: 1
+  });
+  next_router__WEBPACK_IMPORTED_MODULE_1___default.a.push('/index');
+};
+const auth = ctx => {
+  const {
+    token
+  } = next_cookies__WEBPACK_IMPORTED_MODULE_2___default()(ctx);
+
+  if (ctx.req && !token) {
+    ctx.res.writeHead(302, {
+      Location: '/login'
+    });
+    ctx.res.end();
+    return;
+  }
+
+  if (!token) {
+    next_router__WEBPACK_IMPORTED_MODULE_1___default.a.push('/login');
+  }
+
+  return token;
+};
+const getToken = ctx => {
+  const {
+    token
+  } = next_cookies__WEBPACK_IMPORTED_MODULE_2___default()(ctx);
+  return token;
+};
+const logout = () => {
+  _node_modules_js_cookie__WEBPACK_IMPORTED_MODULE_3___default.a.remove('token'); // to support logging out from all windows
+
+  window.localStorage.setItem('logout', _babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0___default()());
+  next_router__WEBPACK_IMPORTED_MODULE_1___default.a.push('/login');
+};
+
+/***/ }),
+
+/***/ 5:
 /*!******************************!*\
   !*** multi ./pages/index.js ***!
   \******************************/
@@ -2453,6 +2799,28 @@ module.exports = require("@fortawesome/free-solid-svg-icons");
 /***/ (function(module, exports) {
 
 module.exports = require("@fortawesome/react-fontawesome");
+
+/***/ }),
+
+/***/ "axios":
+/*!************************!*\
+  !*** external "axios" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("axios");
+
+/***/ }),
+
+/***/ "core-js/library/fn/date/now":
+/*!**********************************************!*\
+  !*** external "core-js/library/fn/date/now" ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("core-js/library/fn/date/now");
 
 /***/ }),
 
@@ -2530,6 +2898,28 @@ module.exports = require("core-js/library/fn/object/keys");
 /***/ (function(module, exports) {
 
 module.exports = require("core-js/library/fn/promise");
+
+/***/ }),
+
+/***/ "next-cookies":
+/*!*******************************!*\
+  !*** external "next-cookies" ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("next-cookies");
+
+/***/ }),
+
+/***/ "next/router":
+/*!******************************!*\
+  !*** external "next/router" ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("next/router");
 
 /***/ }),
 

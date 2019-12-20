@@ -1,11 +1,10 @@
 import Layout from "../components/AppLayout";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import {Button, Form, FormGroup, Label, Input, FormText, Alert} from 'reactstrap';
+import {Button, Form, FormGroup, Input, Alert} from 'reactstrap';
 import Link from "next/link";
-import Router, { useRouter } from 'next/router';
-import fetch from 'isomorphic-unfetch';
 import React from "react";
 import axios from "axios";
+import { login } from '../utils/auth'
 
 class Login extends React.Component{
     constructor(props) {
@@ -36,20 +35,25 @@ class Login extends React.Component{
 
     handleLogin(){
         const apiConfig = require('../api-config');
-        const url = apiConfig.serverUrl + '/authenticate';
+        const url = apiConfig.serverUrl + '/user/authenticate';
         axios.post(url, {
             email: this.state.email,
             password: this.state.password
         })
             .then(function (response) {
-                Router.push('/index');
+                const token  = response.data.token;
+                login({ token });
             })
             .catch(function (error) {
+                var message = error.response.data.message;
+                var email = error.response.status === 404 ? '' : this.state.email;
                 this.setState({
                     alert: {
-                        message: error.response.data.message,
+                        message: message,
                         color: 'danger'
-                    }
+                    },
+                    email: email,
+                    password: ''
                 });
             }.bind(this));
     }
@@ -66,7 +70,7 @@ class Login extends React.Component{
                                 </Alert>
                                 : ''
                             }
-                            <h2 className="text-light bg-dark text-center rounded p-2"> Giriş Yapın </h2>
+                            <h2 className="text-light bg-dark text-center rounded p-2"> Kullanıcı Girişi </h2>
                             <hr/>
                             <Form>
                                 <FormGroup>
@@ -96,7 +100,7 @@ class Login extends React.Component{
                                         size="lg"
                                         onClick={this.handleLogin}
                                         block>
-                                    Kaydı Tamamla
+                                    Giriş Yapın
                                 </Button>
                             </Form>
                             <hr/>

@@ -33,7 +33,7 @@ class Registration extends React.Component{
     }
     handleRegistration(){
         const apiConfig = require('../api-config');
-        const url = apiConfig.serverUrl + '/user';
+        const url = apiConfig.serverUrl + '/user/save';
         if (this.state.password !== this.state.passwordConfirm){
             document.getElementById('password-confirm').style.border = '1px solid red';
             return;
