@@ -3,19 +3,22 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import ItemCard from "../components/ItemCard";
 import { getToken } from '../utils/auth'
 import axios from "axios";
+const apiConfig = require('../api-config');
 
 class Index extends React.Component{
     constructor(props) {
         super(props);
         var token = this.props.token;
         this.getUser(token);
+        this.getActiveSales();
         this.state = {
             loggedIn: token ? true : false,
-            user: {}
+            user: {},
+            sales: []
         }
     }
+
     getUser(token){
-        const apiConfig = require('../api-config');
         const url = apiConfig.serverUrl + '/user/get';
         axios.post(url, {}, {
             headers:{
@@ -30,8 +33,23 @@ class Index extends React.Component{
                 console.log(error);
             }.bind(this));
     }
+    getActiveSales(){
+        const url = apiConfig.serverUrl + '/sales/active';
+        axios.get(url)
+            .then((response) => {
+                this.setState({
+                    sales: response.data.sales
+                });
+            }).catch((error) => {
+                console.log(error);
+            });
+    }
 
     render() {
+        console.log(this.state.sales);
+        const sales = this.state.sales.map((sale) =>
+            <ItemCard sale={sale} />
+                      );
         return (
             <Layout page="home" user={this.state.user} loggedIn={this.state.loggedIn}>
                 <div className="container bg-white" style={{ padding:'3%', marginTop:'3%'}}>
@@ -44,30 +62,7 @@ class Index extends React.Component{
                     </p>
                     <hr></hr>
                     <div className="row">
-                        <ItemCard name="Piyano"
-                                  description="Değeri yüksek profesyonel bir piyano. Temiz kullanılmış ve tüm parçaları sağlam."
-                                  image="/piano.jpg" />
-                        <ItemCard name="Akıllı Süpürge"
-                                  description="Son teknoloji yapay zeka ev süpürgesi. Sizin yerinize kirleri tespit edip süpürür."
-                                  image="/cleaner.jpg" />
-                        <ItemCard name="Orijinal Resim"
-                                  description="Beyin hastalıklarının tedavisinde kullanılabilen terapi resmi."
-                                  image="/art.jpg" />
-                        <ItemCard name="Akıllı Saat"
-                                  description="İlk testlerini Steve Jobs'ın yaptığı ve bir süre kullandığı orijinal Apple Watch. "
-                                  image="/apple-watch.jpeg" />
-                        <ItemCard name="Sihirli Değnek"
-                                  description="Harry Potter'ın Voldemort'u alt ettiği orijinal sihirli değnek."
-                                  image="/wand.png" />
-                        <ItemCard name="Güç Yüzüğü"
-                                  description="Frodo'nun cebe indirip herkese Hüküm Dağı'na attım dediği meşhur yüzük."
-                                  image="/ring.jpeg" />
-                        <ItemCard name="Zaman Makinesi"
-                                  description="Zamanda yolculuk yapan ilk insan olabilmek için zaman makinesini kaçırmayın."
-                                  image="/time-machine.jpg" />
-                        <ItemCard name="Titanik"
-                                  description="Batmayan gemi Titanik'in üretime geçirilmeden önce tasarlanan modeli."
-                                  image="/titanic.jpg" />
+                        {sales}
                     </div>
                 </div>
             </Layout>

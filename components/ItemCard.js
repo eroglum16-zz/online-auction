@@ -2,31 +2,31 @@ import {Button, Card, CardBody, CardImg, CardSubtitle, CardTitle} from "reactstr
 import Link from "next/link";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faMapMarkerAlt} from '@fortawesome/free-solid-svg-icons'
+const apiConfig = require('../api-config');
 
 class ItemCard extends React.Component{
     render() {
-        let itemName = this.props.name;
-        let itemDescription = this.props.description;
-
         return (
             <div className="col-md-3 mb-5">
                         <Card style={{boxShadow: '0px 10px 5px 0px #ccc'}}>
-                            <Link href={'/a/[id]'} as={`/a/1`} >
+                            <Link href={'/a/[id]'} as={`/a/` + this.props.sale._id} >
                                 <a style={{color:'inherit', textDecoration:'none'}}>
                                     <CardImg top width="100%"
-                                             src={this.props.image}
+                                             src={apiConfig.serverUrl + '/images/products/' + this.props.sale.images[0]}
                                              alt="Card image cap" />
                                 </a>
                             </Link>
                             <CardBody>
-                                <Link href={'/a/[id]'} as={`/a/1`} >
+                                <Link href={'/a/[id]'} as={`/a/` + this.props.sale._id} >
                                     <a style={{color:'inherit', textDecoration:'none'}}>
-                                        <CardTitle style={{fontWeight:'bold'}}> {itemName} </CardTitle>
+                                        <CardTitle style={{fontWeight:'bold'}}> {this.props.sale.title} </CardTitle>
                                     </a>
                                 </Link>
-                                <CardSubtitle style={{fontSize:'14px'}} className="text-muted"> Mert Eroğlu </CardSubtitle>
+                                <CardSubtitle style={{fontSize:'14px'}} className="text-muted"> {this.props.sale.owner.nameSurname} </CardSubtitle>
                                 <hr/>
-                                <span style={{fontSize:'16px'}}> <FontAwesomeIcon icon={faMapMarkerAlt} width="16" /> İstanbul, Sarıyer</span>
+                                <span style={{fontSize:'16px'}}>
+                                    <FontAwesomeIcon icon={faMapMarkerAlt} width="16" /> {this.props.sale.city}, {this.props.sale.district}
+                                </span>
                                 <style jsx>{`
                     h1,
                     a {

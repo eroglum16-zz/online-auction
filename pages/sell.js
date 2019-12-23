@@ -4,6 +4,7 @@ import { Form, FormGroup, Label, Input, InputGroupText, InputGroupAddon, InputGr
 import {faCalendar, faLiraSign} from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
 import {auth} from "../utils/auth";
+import Router from 'next/router'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from  "react-datepicker";
@@ -35,6 +36,7 @@ class Sell extends React.Component{
             loggedIn: token ? true : false,
             user: {},
             title: '',
+            description: '',
             state: '',
             firstPrice: '',
             locations: [apiConfig.defaultCity],
@@ -91,28 +93,38 @@ class Sell extends React.Component{
             });
     }
     handleSubmit = (event) => {
-        const url = apiConfig.serverUrl + '/sales/new';
+        const url = apiConfig.serverUrl + '/sale/new';
 
         event.preventDefault();
 
         let filenames = [];
 
-        for (var i=0; i < event.target.filepond.length; i++){
-            filenames.push(event.target.filepond[i].value);
-        }
+        if (event.target.filepond.length){
+            for (var i=0; i < event.target.filepond.length; i++){
+                filenames.push(event.target.filepond[i].value);
+            }
+        }else if(event.target.filepond.value){
+            filenames.push(event.target.filepond.value);
+        }else return;
 
         axios.post(url,{
-            token: this.state.token,
             title: this.state.title,
+            description: this.state.description,
             state: this.state.state,
             firstPrice: this.state.firstPrice,
             endDate: this.state.endDate,
             city: this.state.city,
             district: this.state.district,
-            files: filenames
+            images: filenames
+        },{
+            headers:{
+                authorization: this.state.user.token
+            }
         }).then((response) => {
-
-        }).catch();
+            Router.push('/index');
+        }).catch((error) => {
+            console.log(error);
+        });
     }
     getLocations(){
         const apiConfig = require('../api-config');
@@ -163,12 +175,23 @@ class Sell extends React.Component{
                                            placeholder="Ürününüzü tanımlayan birkaç kelime..." />
                                 </FormGroup>
                                 <FormGroup>
+                                    <Label for="description">Açıklama</Label>
+                                    <Input type="textarea"
+                                           id="description"
+                                           name="description"
+                                           value={this.state.description}
+                                           rows="5"
+                                           onChange={this.handleInputChange}
+                                           placeholder="Ürününüz hakkında açıklamalar ve belirtmek istediğiniz ekstra bilgiler." />
+                                </FormGroup>
+                                <FormGroup>
                                     <Label for="state">Durum</Label>
                                     <Input type="select"
                                            name="state"
                                            id="state"
                                            value={this.state.state}
                                            onChange={this.handleInputChange}>
+                                        <option>Durum seçin</option>
                                         <option>Kullanılmamış</option>
                                         <option>Yeni gibi</option>
                                         <option>Az kullanılmış</option>
@@ -206,6 +229,7 @@ class Sell extends React.Component{
                                             selected={this.state.endDate}
                                             onChange={this.handleChange}
                                             locale="tr"
+                                            showTimeSelect
                                         />
                                     </InputGroup>
                                 </FormGroup>
@@ -257,7 +281,13 @@ class Sell extends React.Component{
                                         labelTapToCancel="İptal etmek için tıklayın"
                                         allowMultiple={true}
                                         maxFiles={5}
-                                        server={apiConfig.serverUrl + '/file/product'}
+                                        server={
+                                            {
+                                                url: apiConfig.serverUrl,
+                                                process: '/file/product',
+                                                revert: '/file/product'
+                                            }
+                                        }
                                         onupdatefiles={fileItems => {
                                             // Set currently active file objects to this.state
                                             this.setState({
