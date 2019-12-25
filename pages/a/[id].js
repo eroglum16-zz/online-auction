@@ -1,49 +1,162 @@
 import Layout from '../../components/AppLayout';
+import Bidding from "../../components/Bidding";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
-import {
-    Carousel,
-    CarouselItem,
-    CarouselControl,
-    CarouselIndicators,
-    CarouselCaption
-} from 'reactstrap';
+import {Badge} from 'reactstrap';
+import {Carousel, CarouselItem, CarouselControl, CarouselIndicators} from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLiraSign, faUser, faMoneyBill, faUsers, faThumbsUp, faCalendarAlt, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
-import Link from "next/link";
+import {faUser, faMoneyBill, faUsers, faThumbsUp, faCalendarAlt, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
 import axios from "axios";
+import { getToken } from '../../utils/auth';
+import socketIOClient from 'socket.io-client';
 
 const apiConfig = require('../../api-config');
 const defaults = require('../../utils/defaults');
+const socket = socketIOClient(apiConfig.serverUrl);
 
 class AuctionDetail extends React.Component{
     constructor(props) {
         super(props);
+        var token = this.props.token;
+        this.getUser(token);
+
         this.state = {
+            loggedIn: token ? true : false,
+            user: {},
+            bid: "",
             activeIndex: 0,
             animating: false,
-            sale: defaults.defaultSale
-        }
+            sale: defaults.defaultSale,
+            maxBid:{
+                amount: null,
+                bidder: ""
+            },
+            biddingFade: {
+                message: "",
+                in: false
+            }
+        };
+        this.handleNewBid = this.handleNewBid.bind(this);
+        this.handleInputChange  = this.handleInputChange.bind(this);
+        this.getSale = this.getSale.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
     }
     componentDidMount(){
         const saleId = this.props.id;
         this.getSale(saleId);
+        this.setState({bid: ""});
+        socket.on('bid update on ' + saleId, () => {
+            this.getSale(saleId);
+        });
+        console.log("saleId: " + saleId);
+        socket.on('sale ' + saleId + ' expired', () => {
+            this.getSale(saleId);
+        });
+    }
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+
+        this.setState({
+            [name]: value,
+        });
+    }
+    handleKeyDown(event) {
+        if (event.key === 'Enter') {
+            this.handleNewBid();
+            this.getSale(this.state.sale._id);
+        }
+    }
+    handleNewBid(){
+        if (this.state.bid === ""){
+            this.showFade("Önce teklifinizi girin.");
+            return;
+        }
+        if (this.state.bid < this.state.sale.firstPrice){
+            this.showFade("Başlangıç fiyatından düşük teklif veremezsiniz. (" + this.state.sale.firstPrice + "₺)");
+            this.setState({
+                bid: ""
+            });
+            return;
+        }
+        if (this.state.bid < this.state.maxBid.amount){
+            this.showFade("En yüksek tekliften düşük teklif veremezsiniz. (" + this.state.maxBid.amount + "₺)");
+            return;
+        }
+        if (this.state.bid == this.state.maxBid.amount){
+            this.showFade(this.state.bid + "₺ en yüksek teklif, aynı teklifi vermezsiniz.");
+            return;
+        }
+
+        socket.emit('new bid', {
+            saleId: this.state.sale._id,
+            bid: {
+                amount: parseInt(this.state.bid),
+                bidder: this.state.user.email
+            }
+        });
+    }
+    showFade(message){
+
+        this.setState({biddingFade: {
+                message: message,
+                in: true
+            }});
+
+        setInterval(() => {
+            this.setState({
+                biddingFade: {
+                    message:"",
+                    in:false
+                }
+            });
+        },60000);
+
+    }
+    getUser(token){
+        const url = apiConfig.serverUrl + '/user/get';
+        axios.post(url, {}, {
+            headers:{
+                authorization: token
+            }})
+            .then((response) => {
+                this.setState({
+                    user: response.data.user
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            }.bind(this));
     }
     getSale(id){
         const url = apiConfig.serverUrl + '/sale/' + id;
         axios.get(url)
             .then((response) => {
+                var maxBid = response.data.sale.bids.length === 0 ? {
+                    bidder: "",
+                    amount: 0
+                }
+                :
+                    response.data.sale.bids.reduce((a, b) => {
+                    return a.amount > b.amount ? a : b;
+                });
+                var sale = response.data.sale;
+                sale.isActive = (Date.now() < sale.endDate);
                 this.setState({
-                    sale: response.data.sale
+                    sale: sale,
+                    maxBid: maxBid
                 });
             })
             .catch((error) => {
                 console.log(error);
+                //if(!error.response) Router.push('/index');
+                //if(error.response.status === 404) Router.push('/index');
             })
     }
-
     render() {
-        var loggedIn = false;
+        var loggedIn = this.state.loggedIn;
+        const userEmail = this.state.user ? this.state.user.email : "";
+
         const images = this.state.sale.images;
         const items = [];
 
@@ -95,17 +208,22 @@ class AuctionDetail extends React.Component{
         const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
         const endDate = this.state.sale.endDate === 0 ? "-" : date.toLocaleDateString('tr-TR', options);
 
-        
         return (
-            <Layout page="home">
+            <Layout page="home" user={this.state.user} loggedIn={this.state.loggedIn}>
                 <div className="container bg-white" style={{ padding:'3%', marginTop:'3%', boxShadow: '0px 10px 5px 0px #ccc'}} >
-                    <h2> {this.state.sale.title} </h2>
+                    <h2> {this.state.sale.title} {userEmail === this.state.sale.owner.email ?
+                        <Badge className="ml-2" color="dark" pill>Sizin ilanınız</Badge> : ""
+                    }
+                        <span className="float-right">
+
+                        </span>
+                    </h2>
                     <hr/>
                     <p style={{fontFamily:'verdana', fontSize:'17px', marginBottom:'50px'}}>
                         {this.state.sale.description}
                     </p>
                     <div className="row">
-                        <div className="col-md-9">
+                        <div className="col-md-8">
                             <Carousel
                                 activeIndex={this.state.activeIndex}
                                 next={next}
@@ -119,42 +237,19 @@ class AuctionDetail extends React.Component{
                                 <CarouselControl direction="next" directionText="Next" onClickHandler={next} />
                             </Carousel>
                         </div>
-                        <div className="col-md-3 pt-4">
-
-                                <h4  className="text-center">En Yüksek Teklif</h4>
-                                <p className="text-center"><FontAwesomeIcon icon={faLiraSign} width="16" /> 1200</p>
-                                <hr/>
-                                <h5 className="text-center mb-3">Teklif Ver</h5>
-                            {
-                                loggedIn  ?
-                                <p className="text-center">
-                                    Teklif vermek için
-                                    <Link href={'/registration'} >
-                                        <a className="text-dark"> üye olun</a>
-                                    </Link>
-                                </p>
-                                :
-                                <div className="text-center justify-content-md-center">
-                                    <Form>
-                                        <FormGroup>
-                                            <InputGroup
-                                                style={{width:'60%', marginLeft:'20%'}} >
-                                                <InputGroupAddon addonType="prepend">
-                                                    <InputGroupText>₺</InputGroupText>
-                                                </InputGroupAddon>
-                                                <Input className="text-center"
-                                                       bgSize="sm"
-                                                       type="number"
-                                                       name="offer"
-                                                       placeholder="Teklifiniz"/>
-                                            </InputGroup>
-
-                                        </FormGroup>
-                                        <Button color="dark">Gönder</Button>
-                                    </Form>
-                                </div>
-                            }
-
+                        <div className="col-md-4 pt-4">
+                            <Bidding loggedIn={loggedIn}
+                                     saleOwner={loggedIn && this.state.sale.owner.email === this.state.user.email}
+                                     finishedSale={!this.state.sale.isActive}
+                                     maxBidder={loggedIn && this.state.maxBid.bidder === this.state.user.email}
+                                     bid={this.state.bid}
+                                     biddingFade={this.state.biddingFade}
+                                     endDate={this.state.sale.endDate}
+                                     maxBid={this.state.maxBid}
+                                     handleInputChange={this.handleInputChange}
+                                     handleKeyDown={this.handleKeyDown}
+                                     handleNewBid={this.handleNewBid}
+                                     />
                         </div>
                     </div>
                     <div className="row">
@@ -199,7 +294,9 @@ AuctionDetail.getInitialProps = async function(context) {
 
     const {id} = context.query;
 
-    return {id};
+    const token = getToken(context);
+
+    return {id, token};
 
 };
 

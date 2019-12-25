@@ -8,12 +8,12 @@ class ItemCard extends React.Component{
     render() {
         return (
             <div className="col-md-3 mb-5">
-                        <Card style={{boxShadow: '0px 10px 5px 0px #ccc'}}>
+                        <Card  style={{boxShadow: '0px 10px 5px 0px #ccc'}}>
                             <Link href={'/a/[id]'} as={`/a/` + this.props.sale._id} >
                                 <a style={{color:'inherit', textDecoration:'none'}}>
                                     <CardImg top width="100%"
                                              src={apiConfig.serverUrl + '/images/products/' + this.props.sale.images[0]}
-                                             alt="Card image cap" />
+                                             alt={this.props.sale.title} />
                                 </a>
                             </Link>
                             <CardBody>

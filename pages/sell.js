@@ -10,22 +10,19 @@ import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from  "react-datepicker";
 import tr from 'date-fns/locale/tr';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-registerLocale('tr', tr);
-const apiConfig = require('../api-config');
-
-// Import React FilePond
 import { FilePond, registerPlugin } from "react-filepond";
-
-// Import FilePond styles
 import "filepond/dist/filepond.min.css";
-
-// Import the Image EXIF Orientation and Image Preview plugins
-// Note: These need to be installed separately
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-// Register the plugins
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import socketIOClient from 'socket.io-client';
+
+const apiConfig = require('../api-config');
+const socket = socketIOClient(apiConfig.serverUrl);
+
+registerLocale('tr', tr);
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType);
 
 class Sell extends React.Component{
     constructor(props) {
@@ -50,6 +47,9 @@ class Sell extends React.Component{
         this.updateSelectedCity = this.updateSelectedCity.bind(this);
         this.handleSubmit       = this.handleSubmit.bind(this);
     }
+    componentDidMount() {
+        this.getLocations();
+    }
     handleInputChange(event) {
         const target = event.target;
         const value = target.value;
@@ -64,34 +64,11 @@ class Sell extends React.Component{
             this.updateSelectedCity(selectedCity);
         }
     }
-    updateSelectedCity(city){
-        this.setState({
-            selectedCity: city
-        });
-    }
-    componentDidMount() {
-        this.getLocations();
-    }
     handleChange = date => {
         this.setState({
             endDate: date
         });
     };
-    getUser(token){
-        const url = apiConfig.serverUrl + '/user/get';
-        axios.post(url, {}, {
-            headers:{
-                authorization: token
-            }})
-            .then((response) => {
-                this.setState({
-                    user: response.data.user
-                });
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
     handleSubmit = (event) => {
         const url = apiConfig.serverUrl + '/sale/new';
 
@@ -121,10 +98,30 @@ class Sell extends React.Component{
                 authorization: this.state.user.token
             }
         }).then((response) => {
+            var saleId = response.data.saleId;
+            socket.emit('new sale', {
+                saleId: saleId,
+                endDate: this.state.endDate
+            });
             Router.push('/index');
         }).catch((error) => {
             console.log(error);
         });
+    }
+    getUser(token){
+        const url = apiConfig.serverUrl + '/user/get';
+        axios.post(url, {}, {
+            headers:{
+                authorization: token
+            }})
+            .then((response) => {
+                this.setState({
+                    user: response.data.user
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
     getLocations(){
         const apiConfig = require('../api-config');
@@ -140,7 +137,11 @@ class Sell extends React.Component{
                 console.log(error);
             }.bind(this));
     }
-
+    updateSelectedCity(city){
+        this.setState({
+            selectedCity: city
+        });
+    }
     render() {
         const cities = this.state.locations.map((location) =>
             <option>{location.city}</option>
@@ -271,6 +272,8 @@ class Sell extends React.Component{
                                     <FilePond
                                         id="filepond"
                                         files={this.state.files}
+                                        allowFileTypeValidation
+                                        acceptedFileTypes={['image/*']}
                                         labelInvalidField="Sadece fotoğraf dosyaları yükleyebilirsiniz"
                                         labelIdle="Sürükleyip bırakın, veya bilgisayarınızdan yüklemek için tıklayın"
                                         labelTapToRetry="Yeniden denemek için tıklayın"
@@ -280,7 +283,7 @@ class Sell extends React.Component{
                                         labelFileProcessing="Fotoğraf yükleniyor"
                                         labelTapToCancel="İptal etmek için tıklayın"
                                         allowMultiple={true}
-                                        maxFiles={5}
+                                        maxFiles={6}
                                         server={
                                             {
                                                 url: apiConfig.serverUrl,

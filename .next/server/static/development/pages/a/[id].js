@@ -101,6 +101,11 @@ module.exports =
 /***/ (function(module, exports) {
 
 exports.serverUrl = 'http://localhost:3030';
+exports.defaultCity = {
+  city: "İzmir",
+  code: 35,
+  districts: ["Aliağa", "Bayındır", "Bergama", "Bornova", "Çeşme", "Dikili", "Foça", "Karaburun", "Karşıyaka", "Kemalpaşa", "Kınık", "Kiraz", "Menemen", "Ödemiş", "Seferihisar", "Selçuk", "Tire", "Torbalı", "Urla", "Beydağ", "Buca", "Konak", "Menderes", "Balçova", "Çiğli", "Gaziemir", "Narlıdere", "Güzelbahçe", "Bayraklı", "Karabağlar"]
+};
 
 /***/ }),
 
@@ -148,6 +153,289 @@ class Layout extends react__WEBPACK_IMPORTED_MODULE_1___default.a.Component {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Layout);
+
+/***/ }),
+
+/***/ "./components/Bidding.js":
+/*!*******************************!*\
+  !*** ./components/Bidding.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fortawesome/react-fontawesome */ "@fortawesome/react-fontawesome");
+/* harmony import */ var _fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fortawesome/free-solid-svg-icons */ "@fortawesome/free-solid-svg-icons");
+/* harmony import */ var _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! next/link */ "./node_modules/next/link.js");
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! reactstrap */ "reactstrap");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(reactstrap__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! bootstrap/dist/css/bootstrap.min.css */ "./node_modules/bootstrap/dist/css/bootstrap.min.css");
+/* harmony import */ var bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var react_countdown_now__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-countdown-now */ "react-countdown-now");
+/* harmony import */ var react_countdown_now__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_countdown_now__WEBPACK_IMPORTED_MODULE_6__);
+var _jsxFileName = "/Users/mert/Desktop/I\u0307TU\u0308/Fall 2019/Bitirme/Project/components/Bidding.js";
+
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+
+
+
+
+
+class Bidding extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
+  render() {
+    const horizontalRule = this.props.loggedIn && this.props.saleOwner ? __jsx("hr", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 10
+      },
+      __self: this
+    }) : "";
+    let biddingInput;
+
+    if (this.props.finishedSale || this.props.saleOwner) {
+      biddingInput = "";
+    } else if (!this.props.loggedIn) {
+      biddingInput = __jsx("div", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 17
+        },
+        __self: this
+      }, __jsx("hr", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 18
+        },
+        __self: this
+      }), __jsx("h5", {
+        className: "text-center mb-3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 19
+        },
+        __self: this
+      }, "Teklif Ver"), __jsx("p", {
+        className: "text-center",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 20
+        },
+        __self: this
+      }, "Teklif vermek i\xE7in", __jsx(next_link__WEBPACK_IMPORTED_MODULE_3___default.a, {
+        href: '/registration',
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 22
+        },
+        __self: this
+      }, __jsx("a", {
+        className: "text-dark underline",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 23
+        },
+        __self: this
+      }, " kay\u0131t olun")), " veya", __jsx(next_link__WEBPACK_IMPORTED_MODULE_3___default.a, {
+        href: '/login',
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 25
+        },
+        __self: this
+      }, __jsx("a", {
+        className: "text-dark",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 26
+        },
+        __self: this
+      }, " giri\u015F yap\u0131n"))));
+    } else if (this.props.maxBidder) {
+      biddingInput = __jsx("div", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 32
+        },
+        __self: this
+      }, __jsx("hr", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 33
+        },
+        __self: this
+      }), __jsx("p", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 34
+        },
+        __self: this
+      }, " \u015Eu anda en y\xFCksek teklif sizin teklifiniz. "));
+    } else {
+      biddingInput = __jsx("div", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 37
+        },
+        __self: this
+      }, __jsx("hr", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 38
+        },
+        __self: this
+      }), __jsx("div", {
+        className: "text-center justify-content-md-center",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 39
+        },
+        __self: this
+      }, __jsx("h5", {
+        className: "text-center mb-3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 40
+        },
+        __self: this
+      }, "Teklif Ver"), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_4__["Form"], {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 41
+        },
+        __self: this
+      }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_4__["FormGroup"], {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 42
+        },
+        __self: this
+      }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_4__["InputGroup"], {
+        style: {
+          width: '60%',
+          marginLeft: '20%'
+        },
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 43
+        },
+        __self: this
+      }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_4__["InputGroupAddon"], {
+        addonType: "prepend",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 45
+        },
+        __self: this
+      }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_4__["InputGroupText"], {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 46
+        },
+        __self: this
+      }, "\u20BA")), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_4__["Input"], {
+        className: "text-center",
+        bgSize: "sm",
+        type: "number",
+        form: "nanana",
+        name: "bid",
+        onChange: this.props.handleInputChange,
+        onKeyDown: this.props.handleKeyDown,
+        placeholder: "Teklifiniz",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 48
+        },
+        __self: this
+      })), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_4__["Fade"], {
+        in: this.props.biddingFade.in,
+        tag: "p",
+        className: "mt-3 text-danger",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 58
+        },
+        __self: this
+      }, this.props.biddingFade.message)), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_4__["Button"], {
+        onClick: this.props.handleNewBid,
+        color: "dark",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 63
+        },
+        __self: this
+      }, "G\xF6nder"))));
+    }
+
+    const biddingInfo = this.props.finishedSale ? __jsx("p", {
+      className: "text-center mt-3 text-danger",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 70
+      },
+      __self: this
+    }, "Kapand\u0131") : __jsx("p", {
+      className: "text-center mt-3 text-success",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 74
+      },
+      __self: this
+    }, __jsx(react_countdown_now__WEBPACK_IMPORTED_MODULE_6___default.a, {
+      date: this.props.endDate,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 75
+      },
+      __self: this
+    }));
+    return __jsx("div", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 79
+      },
+      __self: this
+    }, __jsx("h4", {
+      className: "text-center",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 80
+      },
+      __self: this
+    }, "En Y\xFCksek Teklif"), horizontalRule, __jsx("p", {
+      className: "text-center",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 82
+      },
+      __self: this
+    }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_1__["FontAwesomeIcon"], {
+      icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_2__["faLiraSign"],
+      width: "16",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 83
+      },
+      __self: this
+    }), " ", this.props.maxBid.amount), biddingInput, __jsx("hr", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 86
+      },
+      __self: this
+    }), biddingInfo);
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Bidding);
 
 /***/ }),
 
@@ -522,6 +810,17 @@ module.exports = __webpack_require__(/*! core-js/library/fn/object/get-own-prope
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(/*! core-js/library/fn/object/keys */ "core-js/library/fn/object/keys");
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/core-js/parse-int.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/core-js/parse-int.js ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! core-js/library/fn/parse-int */ "core-js/library/fn/parse-int");
 
 /***/ }),
 
@@ -2345,24 +2644,34 @@ module.exports = __webpack_require__(/*! ./dist/client/link */ "./node_modules/n
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_AppLayout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/AppLayout */ "./components/AppLayout.js");
-/* harmony import */ var bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! bootstrap/dist/css/bootstrap.min.css */ "./node_modules/bootstrap/dist/css/bootstrap.min.css");
-/* harmony import */ var bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! reactstrap */ "reactstrap");
-/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(reactstrap__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @fortawesome/react-fontawesome */ "@fortawesome/react-fontawesome");
-/* harmony import */ var _fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @fortawesome/free-solid-svg-icons */ "@fortawesome/free-solid-svg-icons");
-/* harmony import */ var _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! next/link */ "./node_modules/next/link.js");
-/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! axios */ "axios");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/date/now */ "./node_modules/@babel/runtime-corejs2/core-js/date/now.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/parse-int */ "./node_modules/@babel/runtime-corejs2/core-js/parse-int.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _components_AppLayout__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/AppLayout */ "./components/AppLayout.js");
+/* harmony import */ var _components_Bidding__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/Bidding */ "./components/Bidding.js");
+/* harmony import */ var bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! bootstrap/dist/css/bootstrap.min.css */ "./node_modules/bootstrap/dist/css/bootstrap.min.css");
+/* harmony import */ var bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! reactstrap */ "reactstrap");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(reactstrap__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @fortawesome/react-fontawesome */ "@fortawesome/react-fontawesome");
+/* harmony import */ var _fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @fortawesome/free-solid-svg-icons */ "@fortawesome/free-solid-svg-icons");
+/* harmony import */ var _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! axios */ "axios");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _utils_auth__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../utils/auth */ "./utils/auth.js");
+/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! socket.io-client */ "socket.io-client");
+/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(socket_io_client__WEBPACK_IMPORTED_MODULE_11__);
+
+
 var _jsxFileName = "/Users/mert/Desktop/I\u0307TU\u0308/Fall 2019/Bitirme/Project/pages/a/[id].js";
 
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+var __jsx = react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement;
+
+
 
 
 
@@ -2376,34 +2685,155 @@ const apiConfig = __webpack_require__(/*! ../../api-config */ "./api-config.js")
 
 const defaults = __webpack_require__(/*! ../../utils/defaults */ "./utils/defaults.js");
 
-class AuctionDetail extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
+const socket = socket_io_client__WEBPACK_IMPORTED_MODULE_11___default()(apiConfig.serverUrl);
+
+class AuctionDetail extends react__WEBPACK_IMPORTED_MODULE_2___default.a.Component {
   constructor(props) {
     super(props);
+    var token = this.props.token;
+    this.getUser(token);
     this.state = {
+      loggedIn: token ? true : false,
+      user: {},
+      bid: "",
       activeIndex: 0,
       animating: false,
-      sale: defaults.defaultSale
+      sale: defaults.defaultSale,
+      maxBid: {
+        amount: null,
+        bidder: ""
+      },
+      biddingFade: {
+        message: "",
+        in: false
+      }
     };
+    this.handleNewBid = this.handleNewBid.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.getSale = this.getSale.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   componentDidMount() {
     const saleId = this.props.id;
     this.getSale(saleId);
+    this.setState({
+      bid: ""
+    });
+    socket.on('bid update on ' + saleId, () => {
+      this.getSale(saleId);
+    });
+    console.log("saleId: " + saleId);
+    socket.on('sale ' + saleId + ' expired', () => {
+      this.getSale(saleId);
+    });
+  }
+
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.setState({
+      [name]: value
+    });
+  }
+
+  handleKeyDown(event) {
+    if (event.key === 'Enter') {
+      this.handleNewBid();
+      this.getSale(this.state.sale._id);
+    }
+  }
+
+  handleNewBid() {
+    if (this.state.bid === "") {
+      this.showFade("Önce teklifinizi girin.");
+      return;
+    }
+
+    if (this.state.bid < this.state.sale.firstPrice) {
+      this.showFade("Başlangıç fiyatından düşük teklif veremezsiniz. (" + this.state.sale.firstPrice + "₺)");
+      this.setState({
+        bid: ""
+      });
+      return;
+    }
+
+    if (this.state.bid < this.state.maxBid.amount) {
+      this.showFade("En yüksek tekliften düşük teklif veremezsiniz. (" + this.state.maxBid.amount + "₺)");
+      return;
+    }
+
+    if (this.state.bid == this.state.maxBid.amount) {
+      this.showFade(this.state.bid + "₺ en yüksek teklif, aynı teklifi vermezsiniz.");
+      return;
+    }
+
+    socket.emit('new bid', {
+      saleId: this.state.sale._id,
+      bid: {
+        amount: _babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_1___default()(this.state.bid),
+        bidder: this.state.user.email
+      }
+    });
+  }
+
+  showFade(message) {
+    this.setState({
+      biddingFade: {
+        message: message,
+        in: true
+      }
+    });
+    setInterval(() => {
+      this.setState({
+        biddingFade: {
+          message: "",
+          in: false
+        }
+      });
+    }, 60000);
+  }
+
+  getUser(token) {
+    const url = apiConfig.serverUrl + '/user/get';
+    axios__WEBPACK_IMPORTED_MODULE_9___default.a.post(url, {}, {
+      headers: {
+        authorization: token
+      }
+    }).then(response => {
+      this.setState({
+        user: response.data.user
+      });
+    }).catch(function (error) {
+      console.log(error);
+    }.bind(this));
   }
 
   getSale(id) {
     const url = apiConfig.serverUrl + '/sale/' + id;
-    axios__WEBPACK_IMPORTED_MODULE_7___default.a.get(url).then(response => {
+    axios__WEBPACK_IMPORTED_MODULE_9___default.a.get(url).then(response => {
+      var maxBid = response.data.sale.bids.length === 0 ? {
+        bidder: "",
+        amount: 0
+      } : response.data.sale.bids.reduce((a, b) => {
+        return a.amount > b.amount ? a : b;
+      });
+      var sale = response.data.sale;
+      sale.isActive = _babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0___default()() < sale.endDate;
       this.setState({
-        sale: response.data.sale
+        sale: sale,
+        maxBid: maxBid
       });
     }).catch(error => {
-      console.log(error);
+      console.log(error); //if(!error.response) Router.push('/index');
+      //if(error.response.status === 404) Router.push('/index');
     });
   }
 
   render() {
-    var loggedIn = false;
+    var loggedIn = this.state.loggedIn;
+    const userEmail = this.state.user ? this.state.user.email : "";
     const images = this.state.sale.images;
     const items = [];
     var i;
@@ -2440,7 +2870,7 @@ class AuctionDetail extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
     };
 
     const slides = items.map(item => {
-      return __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["CarouselItem"], {
+      return __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_6__["CarouselItem"], {
         className: "text-center",
         onExiting: () => this.setState({
           animating: true
@@ -2451,7 +2881,7 @@ class AuctionDetail extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
         key: item.src,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 84
+          lineNumber: 197
         },
         __self: this
       }, __jsx("img", {
@@ -2462,7 +2892,7 @@ class AuctionDetail extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
         alt: item.altText,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 89
+          lineNumber: 202
         },
         __self: this
       }));
@@ -2476,11 +2906,13 @@ class AuctionDetail extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       minute: '2-digit'
     };
     const endDate = this.state.sale.endDate === 0 ? "-" : date.toLocaleDateString('tr-TR', options);
-    return __jsx(_components_AppLayout__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    return __jsx(_components_AppLayout__WEBPACK_IMPORTED_MODULE_3__["default"], {
       page: "home",
+      user: this.state.user,
+      loggedIn: this.state.loggedIn,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 100
+        lineNumber: 212
       },
       __self: this
     }, __jsx("div", {
@@ -2492,19 +2924,35 @@ class AuctionDetail extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 101
+        lineNumber: 213
       },
       __self: this
     }, __jsx("h2", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 102
+        lineNumber: 214
       },
       __self: this
-    }, " ", this.state.sale.title, " "), __jsx("hr", {
+    }, " ", this.state.sale.title, " ", userEmail === this.state.sale.owner.email ? __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_6__["Badge"], {
+      className: "ml-2",
+      color: "dark",
+      pill: true,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 103
+        lineNumber: 215
+      },
+      __self: this
+    }, "Sizin ilan\u0131n\u0131z") : "", __jsx("span", {
+      className: "float-right",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 217
+      },
+      __self: this
+    })), __jsx("hr", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 221
       },
       __self: this
     }), __jsx("p", {
@@ -2515,333 +2963,234 @@ class AuctionDetail extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 104
+        lineNumber: 222
       },
       __self: this
     }, this.state.sale.description), __jsx("div", {
       className: "row",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 107
+        lineNumber: 225
       },
       __self: this
     }, __jsx("div", {
-      className: "col-md-9",
+      className: "col-md-8",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 108
+        lineNumber: 226
       },
       __self: this
-    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["Carousel"], {
+    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_6__["Carousel"], {
       activeIndex: this.state.activeIndex,
       next: next,
       previous: previous,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 109
+        lineNumber: 227
       },
       __self: this
-    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["CarouselIndicators"], {
+    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_6__["CarouselIndicators"], {
       items: items,
       activeIndex: this.state.activeIndex,
       onClickHandler: goToIndex,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 114
+        lineNumber: 232
       },
       __self: this
-    }), slides, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["CarouselControl"], {
+    }), slides, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_6__["CarouselControl"], {
       direction: "prev",
       directionText: "Previous",
       onClickHandler: previous,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 118
+        lineNumber: 236
       },
       __self: this
-    }), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["CarouselControl"], {
+    }), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_6__["CarouselControl"], {
       direction: "next",
       directionText: "Next",
       onClickHandler: next,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 119
+        lineNumber: 237
       },
       __self: this
     }))), __jsx("div", {
-      className: "col-md-3 pt-4",
+      className: "col-md-4 pt-4",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 122
+        lineNumber: 240
       },
       __self: this
-    }, __jsx("h4", {
-      className: "text-center",
+    }, __jsx(_components_Bidding__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      loggedIn: loggedIn,
+      saleOwner: loggedIn && this.state.sale.owner.email === this.state.user.email,
+      finishedSale: !this.state.sale.isActive,
+      maxBidder: loggedIn && this.state.maxBid.bidder === this.state.user.email,
+      bid: this.state.bid,
+      biddingFade: this.state.biddingFade,
+      endDate: this.state.sale.endDate,
+      maxBid: this.state.maxBid,
+      handleInputChange: this.handleInputChange,
+      handleKeyDown: this.handleKeyDown,
+      handleNewBid: this.handleNewBid,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 124
+        lineNumber: 241
       },
       __self: this
-    }, "En Y\xFCksek Teklif"), __jsx("p", {
-      className: "text-center",
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 125
-      },
-      __self: this
-    }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_4__["FontAwesomeIcon"], {
-      icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_5__["faLiraSign"],
-      width: "16",
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 125
-      },
-      __self: this
-    }), " 1200"), __jsx("hr", {
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 126
-      },
-      __self: this
-    }), __jsx("h5", {
-      className: "text-center mb-3",
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 127
-      },
-      __self: this
-    }, "Teklif Ver"), loggedIn ? __jsx("p", {
-      className: "text-center",
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 130
-      },
-      __self: this
-    }, "Teklif vermek i\xE7in", __jsx(next_link__WEBPACK_IMPORTED_MODULE_6___default.a, {
-      href: '/registration',
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 132
-      },
-      __self: this
-    }, __jsx("a", {
-      className: "text-dark",
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 133
-      },
-      __self: this
-    }, " \xFCye olun"))) : __jsx("div", {
-      className: "text-center justify-content-md-center",
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 137
-      },
-      __self: this
-    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["Form"], {
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 138
-      },
-      __self: this
-    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["FormGroup"], {
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 139
-      },
-      __self: this
-    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["InputGroup"], {
-      style: {
-        width: '60%',
-        marginLeft: '20%'
-      },
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 140
-      },
-      __self: this
-    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["InputGroupAddon"], {
-      addonType: "prepend",
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 142
-      },
-      __self: this
-    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["InputGroupText"], {
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 143
-      },
-      __self: this
-    }, "\u20BA")), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["Input"], {
-      className: "text-center",
-      bgSize: "sm",
-      type: "number",
-      name: "offer",
-      placeholder: "Teklifiniz",
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 145
-      },
-      __self: this
-    }))), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["Button"], {
-      color: "dark",
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 153
-      },
-      __self: this
-    }, "G\xF6nder"))))), __jsx("div", {
+    }))), __jsx("div", {
       className: "row",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 160
+        lineNumber: 255
       },
       __self: this
     }, __jsx("div", {
       className: "col-md-4",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 161
+        lineNumber: 256
       },
       __self: this
     }, __jsx("p", {
       className: "mb-4 mt-4",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 162
+        lineNumber: 257
       },
       __self: this
-    }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_4__["FontAwesomeIcon"], {
-      icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_5__["faUser"],
+    }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_7__["FontAwesomeIcon"], {
+      icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faUser"],
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 163
+        lineNumber: 258
       },
       __self: this
     }), " ", __jsx("b", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 163
+        lineNumber: 258
       },
       __self: this
     }, "Sat\u0131c\u0131: "), this.state.sale.owner.nameSurname), __jsx("p", {
       className: "mb-4",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 166
+        lineNumber: 261
       },
       __self: this
-    }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_4__["FontAwesomeIcon"], {
-      icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_5__["faMoneyBill"],
+    }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_7__["FontAwesomeIcon"], {
+      icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faMoneyBill"],
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 167
+        lineNumber: 262
       },
       __self: this
     }), " ", __jsx("b", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 167
+        lineNumber: 262
       },
       __self: this
     }, "Ba\u015Flang\u0131\xE7 Fiyat\u0131: "), this.state.sale.firstPrice, "\u20BA")), __jsx("div", {
       className: "col-md-4",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 171
+        lineNumber: 266
       },
       __self: this
     }, __jsx("p", {
       className: "mb-4 mt-4",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 172
+        lineNumber: 267
       },
       __self: this
-    }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_4__["FontAwesomeIcon"], {
-      icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_5__["faUsers"],
+    }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_7__["FontAwesomeIcon"], {
+      icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faUsers"],
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 173
+        lineNumber: 268
       },
       __self: this
     }), " ", __jsx("b", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 173
+        lineNumber: 268
       },
       __self: this
     }, "Teklif say\u0131s\u0131: "), this.state.sale.bids.length), __jsx("p", {
       className: "mb-4",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 176
+        lineNumber: 271
       },
       __self: this
-    }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_4__["FontAwesomeIcon"], {
-      icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_5__["faThumbsUp"],
+    }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_7__["FontAwesomeIcon"], {
+      icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faThumbsUp"],
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 177
+        lineNumber: 272
       },
       __self: this
     }), " ", __jsx("b", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 177
+        lineNumber: 272
       },
       __self: this
     }, "Durum: "), this.state.sale.state)), __jsx("div", {
       className: "col-md-4",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 181
+        lineNumber: 276
       },
       __self: this
     }, __jsx("p", {
       className: "mb-4 mt-4",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 182
+        lineNumber: 277
       },
       __self: this
-    }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_4__["FontAwesomeIcon"], {
-      icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_5__["faCalendarAlt"],
+    }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_7__["FontAwesomeIcon"], {
+      icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faCalendarAlt"],
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 183
+        lineNumber: 278
       },
       __self: this
     }), " ", __jsx("b", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 183
+        lineNumber: 278
       },
       __self: this
     }, "Kapan\u0131\u015F: "), endDate), __jsx("p", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 186
+        lineNumber: 281
       },
       __self: this
-    }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_4__["FontAwesomeIcon"], {
-      icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_5__["faMapMarkerAlt"],
+    }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_7__["FontAwesomeIcon"], {
+      icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faMapMarkerAlt"],
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 187
+        lineNumber: 282
       },
       __self: this
     }), " ", __jsx("b", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 187
+        lineNumber: 282
       },
       __self: this
     }, "Konum: "), this.state.sale.city, ", ", this.state.sale.district)))));
@@ -2853,8 +3202,10 @@ AuctionDetail.getInitialProps = async function (context) {
   const {
     id
   } = context.query;
+  const token = Object(_utils_auth__WEBPACK_IMPORTED_MODULE_10__["getToken"])(context);
   return {
-    id
+    id,
+    token
   };
 };
 
@@ -2938,7 +3289,8 @@ const logout = () => {
 
 exports.defaultSale = {
   owner: {
-    nameSurname: "-"
+    nameSurname: "-",
+    email: "-"
   },
   title: "Yükleniyor...",
   description: "-",
@@ -2949,7 +3301,8 @@ exports.defaultSale = {
   city: "-",
   district: "-",
   images: [],
-  bids: []
+  bids: [],
+  isActive: true
 };
 
 /***/ }),
@@ -3076,6 +3429,17 @@ module.exports = require("core-js/library/fn/object/keys");
 
 /***/ }),
 
+/***/ "core-js/library/fn/parse-int":
+/*!***********************************************!*\
+  !*** external "core-js/library/fn/parse-int" ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("core-js/library/fn/parse-int");
+
+/***/ }),
+
 /***/ "core-js/library/fn/promise":
 /*!*********************************************!*\
   !*** external "core-js/library/fn/promise" ***!
@@ -3142,6 +3506,17 @@ module.exports = require("react");
 
 /***/ }),
 
+/***/ "react-countdown-now":
+/*!**************************************!*\
+  !*** external "react-countdown-now" ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("react-countdown-now");
+
+/***/ }),
+
 /***/ "react-is":
 /*!***************************!*\
   !*** external "react-is" ***!
@@ -3161,6 +3536,17 @@ module.exports = require("react-is");
 /***/ (function(module, exports) {
 
 module.exports = require("reactstrap");
+
+/***/ }),
+
+/***/ "socket.io-client":
+/*!***********************************!*\
+  !*** external "socket.io-client" ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("socket.io-client");
 
 /***/ }),
 

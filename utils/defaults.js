@@ -1,6 +1,7 @@
 exports.defaultSale = {
     owner: {
-        nameSurname: "-"
+        nameSurname: "-",
+        email: "-"
     },
     title: "Yükleniyor...",
     description: "-",
@@ -11,5 +12,6 @@ exports.defaultSale = {
     city: "-",
     district: "-",
     images: [],
-    bids: []
+    bids: [],
+    isActive: true
 }

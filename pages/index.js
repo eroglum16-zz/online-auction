@@ -3,7 +3,10 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import ItemCard from "../components/ItemCard";
 import { getToken } from '../utils/auth'
 import axios from "axios";
+import socketIOClient from 'socket.io-client';
+
 const apiConfig = require('../api-config');
+const socket = socketIOClient(apiConfig.serverUrl);
 
 class Index extends React.Component{
     constructor(props) {
@@ -17,7 +20,11 @@ class Index extends React.Component{
             sales: []
         }
     }
-
+    componentDidMount() {
+        socket.on('update sales', () => {
+            this.getActiveSales();
+        });
+    }
     getUser(token){
         const url = apiConfig.serverUrl + '/user/get';
         axios.post(url, {}, {
@@ -44,9 +51,7 @@ class Index extends React.Component{
                 console.log(error);
             });
     }
-
     render() {
-        console.log(this.state.sales);
         const sales = this.state.sales.map((sale) =>
             <ItemCard sale={sale} />
                       );
