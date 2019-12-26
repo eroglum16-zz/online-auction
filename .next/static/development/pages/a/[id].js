@@ -9,9 +9,9 @@
 
 exports.serverUrl = 'http://localhost:3030';
 exports.defaultCity = {
-  city: "İzmir",
-  code: 35,
-  districts: ["Aliağa", "Bayındır", "Bergama", "Bornova", "Çeşme", "Dikili", "Foça", "Karaburun", "Karşıyaka", "Kemalpaşa", "Kınık", "Kiraz", "Menemen", "Ödemiş", "Seferihisar", "Selçuk", "Tire", "Torbalı", "Urla", "Beydağ", "Buca", "Konak", "Menderes", "Balçova", "Çiğli", "Gaziemir", "Narlıdere", "Güzelbahçe", "Bayraklı", "Karabağlar"]
+  city: "İller",
+  code: 0,
+  districts: ["İl Seçin"]
 };
 
 /***/ }),
@@ -140,7 +140,7 @@ function (_React$Component) {
   Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(Bidding, [{
     key: "render",
     value: function render() {
-      var horizontalRule = this.props.loggedIn && this.props.saleOwner ? __jsx("hr", {
+      var horizontalRule = this.props.loggedIn || this.props.saleOwner || this.props.maxBidder ? __jsx("hr", {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 10
@@ -220,10 +220,17 @@ function (_React$Component) {
             lineNumber: 33
           },
           __self: this
-        }), __jsx("p", {
+        }), __jsx("h5", {
+          className: "text-center mb-3",
           __source: {
             fileName: _jsxFileName,
             lineNumber: 34
+          },
+          __self: this
+        }, "Teklif Ver"), __jsx("p", {
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 35
           },
           __self: this
         }, " \u015Eu anda en y\xFCksek teklif sizin teklifiniz. "));
@@ -231,39 +238,39 @@ function (_React$Component) {
         biddingInput = __jsx("div", {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 37
+            lineNumber: 38
           },
           __self: this
         }, __jsx("hr", {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 38
+            lineNumber: 39
           },
           __self: this
         }), __jsx("div", {
           className: "text-center justify-content-md-center",
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 39
+            lineNumber: 40
           },
           __self: this
         }, __jsx("h5", {
           className: "text-center mb-3",
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 40
+            lineNumber: 41
           },
           __self: this
         }, "Teklif Ver"), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_9__["Form"], {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 41
+            lineNumber: 42
           },
           __self: this
         }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_9__["FormGroup"], {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 42
+            lineNumber: 43
           },
           __self: this
         }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_9__["InputGroup"], {
@@ -273,20 +280,20 @@ function (_React$Component) {
           },
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 43
+            lineNumber: 44
           },
           __self: this
         }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_9__["InputGroupAddon"], {
           addonType: "prepend",
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 45
+            lineNumber: 46
           },
           __self: this
         }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_9__["InputGroupText"], {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 46
+            lineNumber: 47
           },
           __self: this
         }, "\u20BA")), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_9__["Input"], {
@@ -300,7 +307,7 @@ function (_React$Component) {
           placeholder: "Teklifiniz",
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 48
+            lineNumber: 49
           },
           __self: this
         })), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_9__["Fade"], {
@@ -309,7 +316,7 @@ function (_React$Component) {
           className: "mt-3 text-danger",
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 58
+            lineNumber: 59
           },
           __self: this
         }, this.props.biddingFade.message)), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_9__["Button"], {
@@ -317,66 +324,75 @@ function (_React$Component) {
           color: "dark",
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 63
+            lineNumber: 64
           },
           __self: this
         }, "G\xF6nder"))));
       }
 
-      var biddingInfo = this.props.finishedSale ? __jsx("p", {
-        className: "text-center mt-3 text-danger",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 70
-        },
-        __self: this
-      }, "Kapand\u0131") : __jsx("p", {
-        className: "text-center mt-3 text-success",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 74
-        },
-        __self: this
-      }, __jsx(react_countdown_now__WEBPACK_IMPORTED_MODULE_11__["default"], {
-        date: this.props.endDate,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 75
-        },
-        __self: this
-      }));
+      var biddingInfo;
+
+      if (!this.props.finishedSale) {
+        biddingInfo = __jsx("p", {
+          className: "text-center mt-3 text-success",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 72
+          },
+          __self: this
+        }, __jsx(react_countdown_now__WEBPACK_IMPORTED_MODULE_11__["default"], {
+          date: this.props.endDate,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 73
+          },
+          __self: this
+        }));
+      } else if (this.props.maxBidder) {
+        biddingInfo = __jsx("p", {
+          className: "text-center mt-3 text-success",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 77
+          },
+          __self: this
+        }, "Kazand\u0131n\u0131z");
+      } else {
+        biddingInfo = __jsx("p", {
+          className: "text-center mt-3 text-danger",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 82
+          },
+          __self: this
+        }, "Kapand\u0131");
+      }
+
+      var maxBidInfo = this.props.maxBid.amount in [null, 0] ? 'Teklif veren olmadı.' : this.props.maxBid.bidder.nameSurname + ': ' + this.props.maxBid.amount + '₺';
       return __jsx("div", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 79
+          lineNumber: 93
         },
         __self: this
       }, __jsx("h4", {
         className: "text-center",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 80
+          lineNumber: 94
         },
         __self: this
-      }, "En Y\xFCksek Teklif"), horizontalRule, __jsx("p", {
+      }, "En Y\xFCksek Teklif"), __jsx("p", {
         className: "text-center",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 82
+          lineNumber: 96
         },
         __self: this
-      }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_6__["FontAwesomeIcon"], {
-        icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_7__["faLiraSign"],
-        width: "16",
+      }, maxBidInfo), biddingInput, __jsx("hr", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 83
-        },
-        __self: this
-      }), " ", this.props.maxBid.amount), biddingInput, __jsx("hr", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 86
+          lineNumber: 101
         },
         __self: this
       }), biddingInfo);
@@ -22527,7 +22543,7 @@ if (typeof WebSocket !== 'undefined') {
 
 if (typeof window === 'undefined') {
   try {
-    NodeWebSocket = __webpack_require__(/*! ws */ 3);
+    NodeWebSocket = __webpack_require__(/*! ws */ 2);
   } catch (e) { }
 }
 
@@ -49820,8 +49836,11 @@ function (_React$Component) {
       animating: false,
       sale: defaults.defaultSale,
       maxBid: {
-        amount: null,
-        bidder: ""
+        amount: 0,
+        bidder: {
+          email: "",
+          nameSurname: ""
+        }
       },
       biddingFade: {
         message: "",
@@ -49899,7 +49918,7 @@ function (_React$Component) {
         saleId: this.state.sale._id,
         bid: {
           amount: _babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_3___default()(this.state.bid),
-          bidder: this.state.user.email
+          bidder: this.state.user
         }
       });
     }
@@ -49949,7 +49968,10 @@ function (_React$Component) {
       var url = apiConfig.serverUrl + '/sale/' + id;
       axios__WEBPACK_IMPORTED_MODULE_18___default.a.get(url).then(function (response) {
         var maxBid = response.data.sale.bids.length === 0 ? {
-          bidder: "",
+          bidder: {
+            email: "",
+            nameSurname: ""
+          },
           amount: 0
         } : response.data.sale.bids.reduce(function (a, b) {
           return a.amount > b.amount ? a : b;
@@ -50027,7 +50049,7 @@ function (_React$Component) {
           key: item.src,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 197
+            lineNumber: 203
           },
           __self: this
         }, __jsx("img", {
@@ -50038,7 +50060,7 @@ function (_React$Component) {
           alt: item.altText,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 202
+            lineNumber: 208
           },
           __self: this
         }));
@@ -50058,7 +50080,7 @@ function (_React$Component) {
         loggedIn: this.state.loggedIn,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 212
+          lineNumber: 218
         },
         __self: this
       }, __jsx("div", {
@@ -50070,13 +50092,13 @@ function (_React$Component) {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 213
+          lineNumber: 219
         },
         __self: this
       }, __jsx("h2", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 214
+          lineNumber: 220
         },
         __self: this
       }, " ", this.state.sale.title, " ", userEmail === this.state.sale.owner.email ? __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_15__["Badge"], {
@@ -50085,20 +50107,20 @@ function (_React$Component) {
         pill: true,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 215
+          lineNumber: 221
         },
         __self: this
       }, "Sizin ilan\u0131n\u0131z") : "", __jsx("span", {
         className: "float-right",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 217
+          lineNumber: 223
         },
         __self: this
       })), __jsx("hr", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 221
+          lineNumber: 227
         },
         __self: this
       }), __jsx("p", {
@@ -50109,21 +50131,21 @@ function (_React$Component) {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 222
+          lineNumber: 228
         },
         __self: this
       }, this.state.sale.description), __jsx("div", {
         className: "row",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 225
+          lineNumber: 231
         },
         __self: this
       }, __jsx("div", {
         className: "col-md-8",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 226
+          lineNumber: 232
         },
         __self: this
       }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_15__["Carousel"], {
@@ -50132,7 +50154,7 @@ function (_React$Component) {
         previous: previous,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 227
+          lineNumber: 233
         },
         __self: this
       }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_15__["CarouselIndicators"], {
@@ -50141,7 +50163,7 @@ function (_React$Component) {
         onClickHandler: goToIndex,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 232
+          lineNumber: 238
         },
         __self: this
       }), slides, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_15__["CarouselControl"], {
@@ -50150,7 +50172,7 @@ function (_React$Component) {
         onClickHandler: previous,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 236
+          lineNumber: 242
         },
         __self: this
       }), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_15__["CarouselControl"], {
@@ -50159,21 +50181,21 @@ function (_React$Component) {
         onClickHandler: next,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 237
+          lineNumber: 243
         },
         __self: this
       }))), __jsx("div", {
         className: "col-md-4 pt-4",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 240
+          lineNumber: 246
         },
         __self: this
       }, __jsx(_components_Bidding__WEBPACK_IMPORTED_MODULE_13__["default"], {
         loggedIn: loggedIn,
         saleOwner: loggedIn && this.state.sale.owner.email === this.state.user.email,
         finishedSale: !this.state.sale.isActive,
-        maxBidder: loggedIn && this.state.maxBid.bidder === this.state.user.email,
+        maxBidder: loggedIn && this.state.maxBid.bidder.email === this.state.user.email,
         bid: this.state.bid,
         biddingFade: this.state.biddingFade,
         endDate: this.state.sale.endDate,
@@ -50183,28 +50205,28 @@ function (_React$Component) {
         handleNewBid: this.handleNewBid,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 241
+          lineNumber: 247
         },
         __self: this
       }))), __jsx("div", {
         className: "row",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 255
+          lineNumber: 261
         },
         __self: this
       }, __jsx("div", {
         className: "col-md-4",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 256
+          lineNumber: 262
         },
         __self: this
       }, __jsx("p", {
         className: "mb-4 mt-4",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 257
+          lineNumber: 263
         },
         __self: this
       }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_16__["FontAwesomeIcon"], {
@@ -50212,20 +50234,20 @@ function (_React$Component) {
         width: "16",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 258
+          lineNumber: 264
         },
         __self: this
       }), " ", __jsx("b", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 258
+          lineNumber: 264
         },
         __self: this
       }, "Sat\u0131c\u0131: "), this.state.sale.owner.nameSurname), __jsx("p", {
         className: "mb-4",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 261
+          lineNumber: 267
         },
         __self: this
       }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_16__["FontAwesomeIcon"], {
@@ -50233,27 +50255,27 @@ function (_React$Component) {
         width: "16",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 262
+          lineNumber: 268
         },
         __self: this
       }), " ", __jsx("b", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 262
+          lineNumber: 268
         },
         __self: this
       }, "Ba\u015Flang\u0131\xE7 Fiyat\u0131: "), this.state.sale.firstPrice, "\u20BA")), __jsx("div", {
         className: "col-md-4",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 266
+          lineNumber: 272
         },
         __self: this
       }, __jsx("p", {
         className: "mb-4 mt-4",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 267
+          lineNumber: 273
         },
         __self: this
       }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_16__["FontAwesomeIcon"], {
@@ -50261,20 +50283,20 @@ function (_React$Component) {
         width: "16",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 268
+          lineNumber: 274
         },
         __self: this
       }), " ", __jsx("b", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 268
+          lineNumber: 274
         },
         __self: this
       }, "Teklif say\u0131s\u0131: "), this.state.sale.bids.length), __jsx("p", {
         className: "mb-4",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 271
+          lineNumber: 277
         },
         __self: this
       }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_16__["FontAwesomeIcon"], {
@@ -50282,27 +50304,27 @@ function (_React$Component) {
         width: "16",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 272
+          lineNumber: 278
         },
         __self: this
       }), " ", __jsx("b", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 272
+          lineNumber: 278
         },
         __self: this
       }, "Durum: "), this.state.sale.state)), __jsx("div", {
         className: "col-md-4",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 276
+          lineNumber: 282
         },
         __self: this
       }, __jsx("p", {
         className: "mb-4 mt-4",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 277
+          lineNumber: 283
         },
         __self: this
       }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_16__["FontAwesomeIcon"], {
@@ -50310,19 +50332,19 @@ function (_React$Component) {
         width: "16",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 278
+          lineNumber: 284
         },
         __self: this
       }), " ", __jsx("b", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 278
+          lineNumber: 284
         },
         __self: this
       }, "Kapan\u0131\u015F: "), endDate), __jsx("p", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 281
+          lineNumber: 287
         },
         __self: this
       }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_16__["FontAwesomeIcon"], {
@@ -50330,13 +50352,13 @@ function (_React$Component) {
         width: "16",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 282
+          lineNumber: 288
         },
         __self: this
       }), " ", __jsx("b", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 282
+          lineNumber: 288
         },
         __self: this
       }, "Konum: "), this.state.sale.city, ", ", this.state.sale.district)))));
@@ -50473,7 +50495,18 @@ exports.defaultSale = {
 
 /***/ }),
 
-/***/ 1:
+/***/ 2:
+/*!********************!*\
+  !*** ws (ignored) ***!
+  \********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ 3:
 /*!************************************************************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2Fa%2F%5Bid%5D&absolutePagePath=%2FUsers%2Fmert%2FDesktop%2FI%CC%87TU%CC%88%2FFall%202019%2FBitirme%2FProject%2Fpages%2Fa%2F%5Bid%5D.js ***!
   \************************************************************************************************************************************************************************************/
@@ -50482,17 +50515,6 @@ exports.defaultSale = {
 
 module.exports = __webpack_require__(/*! next-client-pages-loader?page=%2Fa%2F%5Bid%5D&absolutePagePath=%2FUsers%2Fmert%2FDesktop%2FI%CC%87TU%CC%88%2FFall%202019%2FBitirme%2FProject%2Fpages%2Fa%2F%5Bid%5D.js! */"./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2Fa%2F%5Bid%5D&absolutePagePath=%2FUsers%2Fmert%2FDesktop%2FI%CC%87TU%CC%88%2FFall%202019%2FBitirme%2FProject%2Fpages%2Fa%2F%5Bid%5D.js!./");
 
-
-/***/ }),
-
-/***/ 3:
-/*!********************!*\
-  !*** ws (ignored) ***!
-  \********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/* (ignored) */
 
 /***/ }),
 
@@ -50507,5 +50529,5 @@ module.exports = dll_b35e09dc2ca94ac6d9c1;
 
 /***/ })
 
-},[[1,"static/runtime/webpack.js","styles"]]]);
+},[[3,"static/runtime/webpack.js","styles"]]]);
 //# sourceMappingURL=[id].js.map

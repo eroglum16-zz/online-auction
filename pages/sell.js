@@ -1,6 +1,8 @@
+import React from 'react';
 import Layout from "../components/AppLayout";
+import ValidationError from "../components/ValidationError";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import { Form, FormGroup, Label, Input, InputGroupText, InputGroupAddon, InputGroup, Button } from 'reactstrap';
+import { Form, FormGroup, Label, Input, InputGroupText, InputGroupAddon, InputGroup, Button, Progress, Alert } from 'reactstrap';
 import {faCalendar, faLiraSign} from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
 import {auth} from "../utils/auth";
@@ -21,6 +23,8 @@ import socketIOClient from 'socket.io-client';
 const apiConfig = require('../api-config');
 const socket = socketIOClient(apiConfig.serverUrl);
 
+const minimumSaleDuration = (1000 * 60 * 60 * 12); //12 hours
+
 registerLocale('tr', tr);
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType);
 
@@ -34,8 +38,10 @@ class Sell extends React.Component{
             user: {},
             title: '',
             description: '',
-            state: '',
+            state: 'Seçiniz',
             firstPrice: '',
+            focuses: {},
+            validationErrors: {},
             locations: [apiConfig.defaultCity],
             endDate: new Date(),
             selectedCity: apiConfig.defaultCity,
@@ -46,6 +52,8 @@ class Sell extends React.Component{
         this.handleInputChange  = this.handleInputChange.bind(this);
         this.updateSelectedCity = this.updateSelectedCity.bind(this);
         this.handleSubmit       = this.handleSubmit.bind(this);
+        this.handleInputFocus   = this.handleInputFocus.bind(this);
+        this.handleInputBlur    = this.handleInputBlur.bind(this);
     }
     componentDidMount() {
         this.getLocations();
@@ -55,18 +63,49 @@ class Sell extends React.Component{
         const value = target.value;
         const name = target.name;
 
+        let validationErrors = this.state.validationErrors;
+        validationErrors[name] = '';
+
         this.setState({
             [name]: value,
+            validationErrors: validationErrors
         });
 
         if(name == "city"){
-            var selectedCity = this.state.locations.find(location => location.city === value);
+            let selectedCity = this.state.locations.find(location => location.city === value);
             this.updateSelectedCity(selectedCity);
         }
     }
-    handleChange = date => {
+    handleInputFocus(event) {
+        const target = event.target;
+        const name = target.name;
+
+        var focuses = this.state.focuses;
+
+        focuses[name] = true;
+
         this.setState({
-            endDate: date
+            focuses: focuses
+        });
+    }
+    handleInputBlur(event) {
+        const target = event.target;
+        const name = target.name;
+
+        var focuses = this.state.focuses;
+
+        focuses[name] = false;
+
+        this.setState({
+            focuses: focuses
+        });
+    }
+    handleChange = date => {
+        let validationErrors = this.state.validationErrors;
+        validationErrors.endDate = '';
+        this.setState({
+            endDate: date,
+            validationErrors: validationErrors
         });
     };
     handleSubmit = (event) => {
@@ -82,7 +121,10 @@ class Sell extends React.Component{
             }
         }else if(event.target.filepond.value){
             filenames.push(event.target.filepond.value);
-        }else return;
+        }
+
+        let validated = this.validate();
+        if(!validated) return;
 
         axios.post(url,{
             title: this.state.title,
@@ -107,6 +149,54 @@ class Sell extends React.Component{
         }).catch((error) => {
             console.log(error);
         });
+    }
+    validate(){
+        let validated = true;
+
+        let validationErrors = {};
+
+        if(this.state.files.length === 0){
+            validationErrors.image = "Lütfen en az bir fotoğraf yükleyin.";
+            validated = false;
+        }
+
+        if(this.state.title.length === 0){
+            validationErrors.title = "Lütfen ürününüze bir başlık verin.";
+            validated = false;
+        }else if(this.state.title.length > 40){
+            validationErrors.title = "Başlık en fazla 40 karakter olabilir.";
+            validated = false;
+        }
+
+        if(this.state.description.length > 400){
+            validationErrors.description = "Açıklama en fazla 400 karakter olabilir.";
+            validated = false;
+        }
+
+        if(this.state.state == 'Seçiniz'){
+            validationErrors.state = "Lütfen ürününüzün durumunu belirtin.";
+            validated = false;
+        }
+
+        if(this.state.firstPrice.length === 0){
+            validationErrors.firstPrice = "Lütfen bir açılış fiyatı belirleyin.";
+            validated = false;
+        }
+
+        if(this.state.endDate < (Date.now() + minimumSaleDuration)){
+            validationErrors.endDate = "Kapanış tarihi en erken 12 saat sonra olabilir.";
+            validated = false;
+        }
+
+        if(!this.state.selectedCity.code){
+            validationErrors.city = "Lütfen bir konum seçin.";
+            validated = false;
+        }
+
+        this.setState({
+            validationErrors: validationErrors
+        });
+        return validated;
     }
     getUser(token){
         const url = apiConfig.serverUrl + '/user/get';
@@ -157,7 +247,7 @@ class Sell extends React.Component{
         const districts = this.state.selectedCity.districts.map((district)=>
             <option>{district}</option>
         );
-
+        console.log(this.state.validationErrors.title);
         return (
             <Layout page="sell" user={this.state.user} loggedIn={this.state.loggedIn}>
                 <div className="container bg-white" style={{ padding:'3%', marginTop:'3%'}}>
@@ -171,9 +261,20 @@ class Sell extends React.Component{
                                     <Input type="text"
                                            name="title"
                                            id="title"
+                                           maxLength="40"
                                            value={this.state.title}
                                            onChange={this.handleInputChange}
+                                           onFocus={this.handleInputFocus}
+                                           onBlur={this.handleInputBlur}
                                            placeholder="Ürününüzü tanımlayan birkaç kelime..." />
+
+                                    <ValidationError message={this.state.validationErrors.title} />
+                                    { (this.state.focuses.title && this.state.title.length  !== 0 ) ?
+                                        <Progress className="mt-3"
+                                                  color="info"
+                                                  value={this.state.title.length * 2.5} /> : ""
+                                    }
+
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="description">Açıklama</Label>
@@ -182,8 +283,18 @@ class Sell extends React.Component{
                                            name="description"
                                            value={this.state.description}
                                            rows="5"
+                                           maxLength="400"
                                            onChange={this.handleInputChange}
+                                           onFocus={this.handleInputFocus}
+                                           onBlur={this.handleInputBlur}
+                                           style={{outline: 'none'}}
                                            placeholder="Ürününüz hakkında açıklamalar ve belirtmek istediğiniz ekstra bilgiler." />
+                                    <ValidationError message={this.state.validationErrors.description} />
+                                    { (this.state.focuses.description && this.state.description.length  !== 0 ) ?
+                                        <Progress className="mt-3"
+                                                  color="info"
+                                                  value={this.state.description.length / 4} /> : ""
+                                    }
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="state">Durum</Label>
@@ -192,13 +303,14 @@ class Sell extends React.Component{
                                            id="state"
                                            value={this.state.state}
                                            onChange={this.handleInputChange}>
-                                        <option>Durum seçin</option>
+                                        <option>Seçiniz</option>
                                         <option>Kullanılmamış</option>
                                         <option>Yeni gibi</option>
                                         <option>Az kullanılmış</option>
                                         <option>Eski</option>
                                         <option>Çok Eski</option>
                                     </Input>
+                                    <ValidationError message={this.state.validationErrors.state} />
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="firstPrice">Başlangıç Fiyatı</Label>
@@ -215,6 +327,7 @@ class Sell extends React.Component{
                                                id="firstPrice"
                                                placeholder="Minimum satış fiyatını belirtin..." />
                                     </InputGroup>
+                                    <ValidationError message={this.state.validationErrors.firstPrice} />
                                 </FormGroup>
                                 <FormGroup>
                                     <Label style={{display:'block'}} for="endDate">Kapanış Tarihi</Label>
@@ -233,6 +346,7 @@ class Sell extends React.Component{
                                             showTimeSelect
                                         />
                                     </InputGroup>
+                                    <ValidationError message={this.state.validationErrors.endDate} />
                                 </FormGroup>
                                 <FormGroup>
                                     <Label style={{textDecoration:'underline'}} for="location">Konum</Label>
@@ -258,6 +372,7 @@ class Sell extends React.Component{
                                             </Input>
                                         </div>
                                     </div>
+                                    <ValidationError message={this.state.validationErrors.city} />
                                 </FormGroup>
                                 <Button color="danger"
                                         size="lg"
@@ -275,7 +390,7 @@ class Sell extends React.Component{
                                         allowFileTypeValidation
                                         acceptedFileTypes={['image/*']}
                                         labelInvalidField="Sadece fotoğraf dosyaları yükleyebilirsiniz"
-                                        labelIdle="Sürükleyip bırakın, veya bilgisayarınızdan yüklemek için tıklayın"
+                                        labelIdle="Sürükleyip bırakın, veya bilgisayarınızdan yüklemek için tıklayın. <br> En fazla 10 fotoğraf yükleyebilirsiniz."
                                         labelTapToRetry="Yeniden denemek için tıklayın"
                                         labelFileProcessingError="Fotoğraf yüklenirken hata oluştu"
                                         labelFileProcessingComplete="Yükleme tamamlandı"
@@ -283,7 +398,7 @@ class Sell extends React.Component{
                                         labelFileProcessing="Fotoğraf yükleniyor"
                                         labelTapToCancel="İptal etmek için tıklayın"
                                         allowMultiple={true}
-                                        maxFiles={6}
+                                        maxFiles={10}
                                         server={
                                             {
                                                 url: apiConfig.serverUrl,
@@ -292,12 +407,16 @@ class Sell extends React.Component{
                                             }
                                         }
                                         onupdatefiles={fileItems => {
+                                            let validationErrors = this.state.validationErrors;
+                                            validationErrors.image = '';
                                             // Set currently active file objects to this.state
                                             this.setState({
-                                                files: fileItems.map(fileItem => fileItem.file)
+                                                files: fileItems.map(fileItem => fileItem.file),
+                                                validationErrors: validationErrors
                                             });
                                         }}
                                     />
+                                    <ValidationError message={this.state.validationErrors.image} />
                                 </FormGroup>
                             </div>
                         </div>

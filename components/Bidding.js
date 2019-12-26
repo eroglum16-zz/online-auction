@@ -7,7 +7,7 @@ import Countdown from "react-countdown-now";
 
 class Bidding extends React.Component {
     render() {
-        const horizontalRule = (this.props.loggedIn && this.props.saleOwner) ? <hr/> : "";
+        const horizontalRule = (this.props.loggedIn || (this.props.saleOwner || this.props.maxBidder) ) ? <hr/> : "";
 
         let biddingInput;
         if (this.props.finishedSale || this.props.saleOwner){
@@ -31,6 +31,7 @@ class Bidding extends React.Component {
             biddingInput =
                 <div>
                     <hr/>
+                    <h5 className="text-center mb-3">Teklif Ver</h5>
                     <p> Şu anda en yüksek teklif sizin teklifiniz. </p>
                 </div>;
         }else{
@@ -65,23 +66,37 @@ class Bidding extends React.Component {
                 </div>
             </div>;
         }
+        let biddingInfo;
+        if(!this.props.finishedSale){
+            biddingInfo =
+                <p className="text-center mt-3 text-success">
+                    <Countdown date={this.props.endDate} />
+                </p>;
+        }else if(this.props.maxBidder){
+                biddingInfo =
+                    <p className="text-center mt-3 text-success">
+                        Kazandınız
+                    </p>;
+        }else{
+            biddingInfo =
+                <p className="text-center mt-3 text-danger">
+                    Kapandı
+                </p>;
+        }
 
-        const biddingInfo = this.props.finishedSale ?
-            <p className="text-center mt-3 text-danger">
-                Kapandı
-            </p>
+        let maxBidInfo = this.props.maxBid.amount in [null, 0] ?
+            'Teklif veren olmadı.'
             :
-            <p className="text-center mt-3 text-success">
-                <Countdown date={this.props.endDate} />
-            </p>;
-
+            this.props.maxBid.bidder.nameSurname + ': ' + this.props.maxBid.amount + '₺'
+            ;
         return (
             <div>
                 <h4  className="text-center">En Yüksek Teklif</h4>
-                {horizontalRule}
+
                 <p className="text-center">
-                    <FontAwesomeIcon icon={faLiraSign} width="16" /> {this.props.maxBid.amount}
+                    {maxBidInfo}
                 </p>
+
                 {biddingInput}
                 <hr/>
                 {biddingInfo}

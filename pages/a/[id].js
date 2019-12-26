@@ -27,8 +27,11 @@ class AuctionDetail extends React.Component{
             animating: false,
             sale: defaults.defaultSale,
             maxBid:{
-                amount: null,
-                bidder: ""
+                amount: 0,
+                bidder: {
+                    email: "",
+                    nameSurname: ""
+                }
             },
             biddingFade: {
                 message: "",
@@ -92,7 +95,7 @@ class AuctionDetail extends React.Component{
             saleId: this.state.sale._id,
             bid: {
                 amount: parseInt(this.state.bid),
-                bidder: this.state.user.email
+                bidder: this.state.user
             }
         });
     }
@@ -133,7 +136,10 @@ class AuctionDetail extends React.Component{
         axios.get(url)
             .then((response) => {
                 var maxBid = response.data.sale.bids.length === 0 ? {
-                    bidder: "",
+                    bidder: {
+                        email: "",
+                        nameSurname: ""
+                    },
                     amount: 0
                 }
                 :
@@ -241,7 +247,7 @@ class AuctionDetail extends React.Component{
                             <Bidding loggedIn={loggedIn}
                                      saleOwner={loggedIn && this.state.sale.owner.email === this.state.user.email}
                                      finishedSale={!this.state.sale.isActive}
-                                     maxBidder={loggedIn && this.state.maxBid.bidder === this.state.user.email}
+                                     maxBidder={loggedIn && this.state.maxBid.bidder.email === this.state.user.email}
                                      bid={this.state.bid}
                                      biddingFade={this.state.biddingFade}
                                      endDate={this.state.sale.endDate}

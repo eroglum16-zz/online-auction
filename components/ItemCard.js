@@ -1,4 +1,4 @@
-import {Button, Card, CardBody, CardImg, CardSubtitle, CardTitle} from "reactstrap";
+import {Button, Card, CardBody, CardImg, CardSubtitle, CardTitle, Badge} from "reactstrap";
 import Link from "next/link";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faMapMarkerAlt} from '@fortawesome/free-solid-svg-icons'
@@ -6,20 +6,32 @@ const apiConfig = require('../api-config');
 
 class ItemCard extends React.Component{
     render() {
+        let expiredSale = this.props.sale.endDate <= Date.now();
         return (
             <div className="col-md-3 mb-5">
                         <Card  style={{boxShadow: '0px 10px 5px 0px #ccc'}}>
                             <Link href={'/a/[id]'} as={`/a/` + this.props.sale._id} >
                                 <a style={{color:'inherit', textDecoration:'none'}}>
-                                    <CardImg top width="100%"
-                                             src={apiConfig.serverUrl + '/images/products/' + this.props.sale.images[0]}
-                                             alt={this.props.sale.title} />
+                                    <div style={{height: '230px', overflow:'hidden'}}>
+                                        <CardImg top style={{maxWidth: '100%'}}
+                                                 src={apiConfig.serverUrl + '/images/products/' + this.props.sale.images[0]}
+                                                 alt={this.props.sale.title} />
+                                    </div>
                                 </a>
                             </Link>
                             <CardBody>
                                 <Link href={'/a/[id]'} as={`/a/` + this.props.sale._id} >
                                     <a style={{color:'inherit', textDecoration:'none'}}>
-                                        <CardTitle style={{fontWeight:'bold'}}> {this.props.sale.title} </CardTitle>
+                                        <CardTitle style={{fontWeight:'bold'}}>
+                                            {this.props.sale.title}
+                                            <div className="float-right">
+                                            {expiredSale ?
+                                                <Badge color="danger" pill>Kapandı</Badge>
+                                                :
+                                                <Badge color="success" pill>Aktif</Badge>
+                                            }
+                                            </div>
+                                        </CardTitle>
                                     </a>
                                 </Link>
                                 <CardSubtitle style={{fontSize:'14px'}} className="text-muted"> {this.props.sale.owner.nameSurname} </CardSubtitle>
