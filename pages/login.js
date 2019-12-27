@@ -4,7 +4,7 @@ import {Button, Form, FormGroup, Input, Alert} from 'reactstrap';
 import Link from "next/link";
 import React from "react";
 import axios from "axios";
-import { login } from '../utils/auth'
+import {guest, login} from '../utils/auth'
 
 class Login extends React.Component{
     constructor(props) {
@@ -118,6 +118,7 @@ class Login extends React.Component{
 }
 
 Login.getInitialProps = async function(context) {
+    guest(context);
     const {registered} = context.query;
     return {registered};
 };

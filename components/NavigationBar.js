@@ -75,7 +75,7 @@ class NavigationBar extends React.Component {
                         </NavItem>
                         { this.props.loggedIn ?
                         <UncontrolledDropdown nav inNavbar>
-                            <DropdownToggle nav caret>
+                            <DropdownToggle className={this.props.page === "me" ? "active" : ""} nav caret>
                                 <FontAwesomeIcon icon={faUser} width="16" /> {this.props.user.nameSurname ? this.props.user.nameSurname : ''}
                             </DropdownToggle>
                             <DropdownMenu right>

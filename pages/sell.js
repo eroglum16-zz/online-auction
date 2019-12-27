@@ -5,7 +5,7 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import { Form, FormGroup, Label, Input, InputGroupText, InputGroupAddon, InputGroup, Button, Progress, Alert } from 'reactstrap';
 import {faCalendar, faLiraSign} from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
-import {auth} from "../utils/auth";
+import {auth, getUser} from "../utils/auth";
 import Router from 'next/router'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -31,10 +31,9 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, F
 class Sell extends React.Component{
     constructor(props) {
         super(props);
-        var token = this.props.token;
-        this.getUser(token);
+        let token = this.props.token;
         this.state = {
-            loggedIn: token ? true : false,
+            loggedIn: !!token,
             user: {},
             title: '',
             description: '',
@@ -56,6 +55,11 @@ class Sell extends React.Component{
         this.handleInputBlur    = this.handleInputBlur.bind(this);
     }
     componentDidMount() {
+        getUser(this.props.token).then(user => {
+            this.setState({
+                user: user
+            });
+        });
         this.getLocations();
     }
     handleInputChange(event) {
@@ -198,23 +202,7 @@ class Sell extends React.Component{
         });
         return validated;
     }
-    getUser(token){
-        const url = apiConfig.serverUrl + '/user/get';
-        axios.post(url, {}, {
-            headers:{
-                authorization: token
-            }})
-            .then((response) => {
-                this.setState({
-                    user: response.data.user
-                });
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
     getLocations(){
-        const apiConfig = require('../api-config');
         const url = apiConfig.serverUrl + '/locations';
         axios.get(url)
             .then((response) => {

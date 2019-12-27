@@ -1,7 +1,7 @@
 import Layout from "../components/AppLayout";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import ItemCard from "../components/ItemCard";
-import { getToken } from '../utils/auth'
+import { getToken, guest } from '../utils/auth'
 import axios from "axios";
 import socketIOClient from 'socket.io-client';
 
@@ -41,7 +41,7 @@ class Index extends React.Component{
             }.bind(this));
     }
     getActiveSales(){
-        const url = apiConfig.serverUrl + '/sales/active';
+        const url = apiConfig.serverUrl + '/sales';
         axios.get(url)
             .then((response) => {
                 this.setState({

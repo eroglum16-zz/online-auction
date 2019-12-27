@@ -2,26 +2,66 @@ import Layout from "../components/AppLayout";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import SaleRow from "../components/SaleRow";
 import {Badge} from "reactstrap";
+import {auth, getUser} from "../utils/auth"
+import React from "react";
+import axios from "axios";
+const apiConfig = require('../api-config');
 
 class Sales extends React.Component{
-    render() {
-        return (
-            <Layout>
-                <div className="container bg-white" style={{ padding:'3%', marginTop:'3%'}}>
-                    <h2> Sattığınız Ürünler <Badge className="ml-2" color="dark" pill>2</Badge> </h2>
-                    <hr/>
-                    <SaleRow image="/cleaner.jpg"
-                             type="s"
-                             name="Akıllı Süpürge"
-                             description="Son teknoloji yapay zeka ev süpürgesi. Sizin yerinize kirleri tespit edip süpürür." />
+    constructor(props) {
+        super(props);
+        let token = this.props.token;
+        this.state = {
+            loggedIn: !!token,
+            user: {},
+            sales: []
+        };
+    }
+    componentDidMount() {
+        getUser(this.props.token).then(user => {
+            this.setState({
+                user: user
+            });
+            this.getExpiredSales(user.email);
+        });
+    }
+    getExpiredSales(userEmail){
+        const url = apiConfig.serverUrl + '/sales/expired/' + userEmail;
+        axios.get(url)
+            .then((response) => {
+                this.setState({
+                    sales: response.data.sales,
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
 
-                    <SaleRow image="/apple-watch.jpeg"
-                             type="s" name="Apple Watch"
-                             description="İlk testlerini Steve Jobs'ın yaptığı ve bir süre kullandığı orijinal Apple Watch." />
+    render() {
+        const saleRows = this.state.sales.map((sale) =>
+            <SaleRow image={apiConfig.serverUrl + '/images/products/' + sale.images[0]}
+                     type="s"
+                     name={sale.title}
+                     description={sale.description} />
+        );
+        return (
+            <Layout page="me" user={this.state.user} loggedIn={this.state.loggedIn}>
+                <div className="container bg-white" style={{ padding:'3%', marginTop:'3%'}}>
+                    <h2> Sattığınız Ürünler <Badge className="ml-2" color="dark" pill>{this.state.sales.length}</Badge> </h2>
+                    <hr/>
+                    {saleRows}
                 </div>
             </Layout>
         );
     }
 }
+
+Sales.getInitialProps = async ctx => {
+    // Check user's session
+    const token = auth(ctx);
+
+    return { token }
+};
 
 export default Sales;
