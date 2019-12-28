@@ -37348,6 +37348,8 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_13___default.a.createElement;
 
 
 
+var validator = __webpack_require__(/*! ../utils/validations */ "./utils/validations.js");
+
 var Login =
 /*#__PURE__*/
 function (_React$Component) {
@@ -37366,7 +37368,7 @@ function (_React$Component) {
         message: message,
         color: color
       },
-      email: '',
+      email: _this.props.registered ? _this.props.registered : '',
       password: ''
     };
     _this.handleInputChange = _this.handleInputChange.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_7__["default"])(_this));
@@ -37385,6 +37387,8 @@ function (_React$Component) {
   }, {
     key: "handleLogin",
     value: function handleLogin() {
+      if (!this.validate()) return;
+
       var apiConfig = __webpack_require__(/*! ../api-config */ "./api-config.js");
 
       var url = apiConfig.serverUrl + '/user/authenticate';
@@ -37397,17 +37401,45 @@ function (_React$Component) {
           token: token
         });
       })["catch"](function (error) {
-        var message = error.response.data.message;
-        var email = error.response.status === 404 ? '' : this.state.email;
+        if (error.response) {
+          var message = error.response.data.message;
+          this.setState({
+            alert: {
+              message: message,
+              color: 'danger'
+            },
+            password: ''
+          });
+        } else {
+          this.setState({
+            alert: {
+              message: 'Sunucudaki bir sorundan dolayı kayıt işleminizi şu anda gerçekleştiremiyoruz.',
+              color: 'info'
+            }
+          });
+        }
+      }.bind(this));
+    }
+  }, {
+    key: "validate",
+    value: function validate() {
+      if (!validator.isEmail(this.state.email)) {
         this.setState({
           alert: {
-            message: message,
+            message: 'Geçerli bir email adresi girmediniz.',
             color: 'danger'
-          },
-          email: email,
-          password: ''
+          }
         });
-      }.bind(this));
+        return false;
+      } else if (this.state.password.length === 0) {
+        this.setState({
+          alert: {
+            message: 'Şifrenizi girmediniz.',
+            color: 'danger'
+          }
+        });
+        return false;
+      } else return true;
     }
   }, {
     key: "render",
@@ -37416,7 +37448,7 @@ function (_React$Component) {
         page: "login",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 63
+          lineNumber: 89
         },
         __self: this
       }, __jsx("div", {
@@ -37427,53 +37459,53 @@ function (_React$Component) {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 64
+          lineNumber: 90
         },
         __self: this
       }, __jsx("div", {
         className: "row justify-content-md-center",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 65
+          lineNumber: 91
         },
         __self: this
       }, __jsx("div", {
         className: "col-md-4",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 66
+          lineNumber: 92
         },
         __self: this
       }, this.state.alert.message.length > 0 ? __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_11__["Alert"], {
         color: this.state.alert.color,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 68
+          lineNumber: 94
         },
         __self: this
       }, this.state.alert.message) : '', __jsx("h2", {
         className: "text-light bg-dark text-center rounded p-2",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 73
+          lineNumber: 99
         },
         __self: this
       }, " Kullan\u0131c\u0131 Giri\u015Fi "), __jsx("hr", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 74
+          lineNumber: 100
         },
         __self: this
       }), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_11__["Form"], {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 75
+          lineNumber: 101
         },
         __self: this
       }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_11__["FormGroup"], {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 76
+          lineNumber: 102
         },
         __self: this
       }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_11__["Input"], {
@@ -37486,13 +37518,13 @@ function (_React$Component) {
         placeholder: "Kay\u0131tl\u0131 email adresiniz",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 77
+          lineNumber: 103
         },
         __self: this
       })), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_11__["FormGroup"], {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 85
+          lineNumber: 111
         },
         __self: this
       }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_11__["Input"], {
@@ -37505,27 +37537,27 @@ function (_React$Component) {
         placeholder: "Parolan\u0131z",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 86
+          lineNumber: 112
         },
         __self: this
       })), __jsx("p", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 94
+          lineNumber: 120
         },
         __self: this
       }, __jsx(next_link__WEBPACK_IMPORTED_MODULE_12___default.a, {
         href: '/forget-password',
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 95
+          lineNumber: 121
         },
         __self: this
       }, __jsx("a", {
         className: "text-dark ",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 96
+          lineNumber: 122
         },
         __self: this
       }, " Parolam\u0131 unuttum"))), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_11__["Button"], {
@@ -37535,33 +37567,33 @@ function (_React$Component) {
         block: true,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 99
+          lineNumber: 125
         },
         __self: this
       }, "Giri\u015F Yap\u0131n")), __jsx("hr", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 106
+          lineNumber: 132
         },
         __self: this
       }), __jsx("p", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 107
+          lineNumber: 133
         },
         __self: this
       }, "Hesab\u0131n\u0131z yok mu?", __jsx(next_link__WEBPACK_IMPORTED_MODULE_12___default.a, {
         href: '/registration',
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 108
+          lineNumber: 134
         },
         __self: this
       }, __jsx("a", {
         className: "text-dark",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 109
+          lineNumber: 135
         },
         __self: this
       }, " \xDCye olun")))))));
@@ -37704,6 +37736,23 @@ var logout = function logout() {
 
   window.localStorage.setItem('logout', _babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0___default()());
   next_router__WEBPACK_IMPORTED_MODULE_1___default.a.push('/login');
+};
+
+/***/ }),
+
+/***/ "./utils/validations.js":
+/*!******************************!*\
+  !*** ./utils/validations.js ***!
+  \******************************/
+/*! exports provided: isEmail */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isEmail", function() { return isEmail; });
+var isEmail = function isEmail(input) {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(input).toLowerCase());
 };
 
 /***/ }),

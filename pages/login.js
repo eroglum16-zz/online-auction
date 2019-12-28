@@ -6,6 +6,8 @@ import React from "react";
 import axios from "axios";
 import {guest, login} from '../utils/auth'
 
+const validator = require('../utils/validations');
+
 class Login extends React.Component{
     constructor(props) {
         super(props);
@@ -16,13 +18,12 @@ class Login extends React.Component{
                 message: message,
                 color: color
             },
-            email: '',
+            email: this.props.registered ? this.props.registered : '',
             password: ''
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
     }
-
     handleInputChange(event) {
         const target = event.target;
         const value = target.value;
@@ -32,8 +33,8 @@ class Login extends React.Component{
             [name]: value
         });
     }
-
     handleLogin(){
+        if(!this.validate()) return;
         const apiConfig = require('../api-config');
         const url = apiConfig.serverUrl + '/user/authenticate';
         axios.post(url, {
@@ -45,19 +46,44 @@ class Login extends React.Component{
                 login({ token });
             })
             .catch(function (error) {
-                var message = error.response.data.message;
-                var email = error.response.status === 404 ? '' : this.state.email;
-                this.setState({
-                    alert: {
-                        message: message,
-                        color: 'danger'
-                    },
-                    email: email,
-                    password: ''
-                });
+                if (error.response){
+                    let message = error.response.data.message;
+                    this.setState({
+                        alert: {
+                            message: message,
+                            color: 'danger'
+                        },
+                        password: ''
+                    });
+                }else{
+                    this.setState({
+                        alert: {
+                            message: 'Sunucudaki bir sorundan dolayı kayıt işleminizi şu anda gerçekleştiremiyoruz.',
+                            color: 'info'
+                        }
+                    });
+                }
             }.bind(this));
     }
-
+    validate(){
+        if (!validator.isEmail(this.state.email)){
+            this.setState({
+                alert: {
+                    message: 'Geçerli bir email adresi girmediniz.',
+                    color: 'danger'
+                }
+            });
+            return false;
+        }else if (this.state.password.length === 0){
+            this.setState({
+                alert: {
+                    message: 'Şifrenizi girmediniz.',
+                    color: 'danger'
+                }
+            });
+            return false;
+        }else return true
+    }
     render() {
         return (
             <Layout page="login">

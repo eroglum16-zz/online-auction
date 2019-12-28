@@ -460,6 +460,43 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
 
 /***/ }),
 
+/***/ "./components/ValidationError.js":
+/*!***************************************!*\
+  !*** ./components/ValidationError.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! reactstrap */ "reactstrap");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(reactstrap__WEBPACK_IMPORTED_MODULE_1__);
+var _jsxFileName = "/Users/mert/Desktop/I\u0307TU\u0308/Fall 2019/Bitirme/Project/components/ValidationError.js";
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+
+class ValidationError extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
+  render() {
+    if (!this.props.message) return "";else return __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Alert"], {
+      className: "mt-3",
+      color: "danger",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 8
+      },
+      __self: this
+    }, this.props.message);
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (ValidationError);
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime-corejs2/core-js/date/now.js":
 /*!*****************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs2/core-js/date/now.js ***!
@@ -2370,6 +2407,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! next/router */ "next/router");
 /* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(next_router__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _components_ValidationError__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/ValidationError */ "./components/ValidationError.js");
 var _jsxFileName = "/Users/mert/Desktop/I\u0307TU\u0308/Fall 2019/Bitirme/Project/pages/registration.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
@@ -2380,9 +2418,12 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 
-var bcrypt = __webpack_require__(/*! bcryptjs */ "bcryptjs");
 
-var salt = bcrypt.genSaltSync(10);
+const bcrypt = __webpack_require__(/*! bcryptjs */ "bcryptjs");
+
+const salt = bcrypt.genSaltSync(10);
+
+const validator = __webpack_require__(/*! ../utils/validations */ "./utils/validations.js");
 
 class Registration extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   constructor(props) {
@@ -2392,6 +2433,7 @@ class Registration extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Componen
       email: '',
       password: '',
       passwordConfirm: '',
+      validationErrors: {},
       alertMessage: ''
     };
     this.handleRegistration = this.handleRegistration.bind(this);
@@ -2402,8 +2444,11 @@ class Registration extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Componen
     const target = event.target;
     const value = target.value;
     const name = target.name;
+    let errors = this.state.validationErrors;
+    errors[name] = '';
     this.setState({
-      [name]: value
+      [name]: value,
+      validationErrors: errors
     });
   }
 
@@ -2411,24 +2456,56 @@ class Registration extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Componen
     const apiConfig = __webpack_require__(/*! ../api-config */ "./api-config.js");
 
     const url = apiConfig.serverUrl + '/user/save';
-
-    if (this.state.password !== this.state.passwordConfirm) {
-      document.getElementById('password-confirm').style.border = '1px solid red';
-      return;
-    }
-
-    var pass = bcrypt.hashSync(this.state.password, salt);
+    let pass = bcrypt.hashSync(this.state.password, salt);
+    let validated = this.validate();
+    if (!validated) return;
     axios__WEBPACK_IMPORTED_MODULE_5___default.a.post(url, {
       nameSurname: this.state.nameSurname,
       email: this.state.email,
       password: pass
-    }).then(function (response) {
-      next_router__WEBPACK_IMPORTED_MODULE_6___default.a.push('/login?registered=true');
-    }).catch(function (error) {
-      this.setState({
-        alertMessage: error.response.data.message
-      });
-    }.bind(this));
+    }).then(response => {
+      next_router__WEBPACK_IMPORTED_MODULE_6___default.a.push('/login?registered=' + this.state.email);
+    }).catch(error => {
+      if (error.response) {
+        this.setState({
+          alertMessage: error.response.data.message
+        });
+      } else {
+        this.setState({
+          alertMessage: 'Sunucudaki bir çalışmadan dolayı şu anda kayıt gerçekleştirilemiyor.'
+        });
+      }
+    });
+  }
+
+  validate() {
+    let validated = true;
+    let errors = this.state.validationErrors;
+
+    if (this.state.nameSurname.length < 5) {
+      validated = false;
+      errors.nameSurname = "Ad soyad alanına daha uzun bir değer girmelisiniz.";
+    } else if (this.state.nameSurname.length > 50) {
+      validated = false;
+      errors.nameSurname = "Ad soyad en fazla 50 karakterdan oluşabilir.";
+    }
+
+    if (!validator.isEmail(this.state.email)) {
+      validated = false;
+      errors.email = "Geçerli bir email adresi girmediniz.";
+    }
+
+    if (this.state.password !== this.state.passwordConfirm) {
+      validated = false;
+      errors.passwordConfirm = "Şifreler eşleşmiyor.";
+    }
+
+    if (!validated) this.setState({
+      validationErrors: errors,
+      password: '',
+      passwordConfirm: ''
+    });
+    return validated;
   }
 
   render() {
@@ -2436,7 +2513,7 @@ class Registration extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Componen
       page: "registration",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 58
+        lineNumber: 101
       },
       __self: this
     }, __jsx("div", {
@@ -2447,53 +2524,53 @@ class Registration extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Componen
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 59
+        lineNumber: 102
       },
       __self: this
     }, __jsx("div", {
       className: "row justify-content-md-center",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 60
+        lineNumber: 103
       },
       __self: this
     }, __jsx("div", {
       className: "col-md-4",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 61
+        lineNumber: 104
       },
       __self: this
     }, this.state.alertMessage.length > 0 ? __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["Alert"], {
       color: "danger",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 63
+        lineNumber: 106
       },
       __self: this
     }, this.state.alertMessage) : '', __jsx("h2", {
       className: "text-light bg-dark text-center rounded p-2",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 68
+        lineNumber: 111
       },
       __self: this
     }, " Kay\u0131t Olun "), __jsx("hr", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 69
+        lineNumber: 112
       },
       __self: this
     }), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["Form"], {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 70
+        lineNumber: 113
       },
       __self: this
     }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["FormGroup"], {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 71
+        lineNumber: 114
       },
       __self: this
     }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["Input"], {
@@ -2506,13 +2583,20 @@ class Registration extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Componen
       placeholder: "Ad\u0131n\u0131z\u0131 ve soyad\u0131n\u0131z\u0131 girin ",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 72
+        lineNumber: 115
+      },
+      __self: this
+    }), __jsx(_components_ValidationError__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      message: this.state.validationErrors.nameSurname,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 122
       },
       __self: this
     })), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["FormGroup"], {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 80
+        lineNumber: 124
       },
       __self: this
     }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["Input"], {
@@ -2525,13 +2609,20 @@ class Registration extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Componen
       placeholder: "Email adresinizi girin",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 81
+        lineNumber: 125
+      },
+      __self: this
+    }), __jsx(_components_ValidationError__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      message: this.state.validationErrors.email,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 132
       },
       __self: this
     })), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["FormGroup"], {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 89
+        lineNumber: 134
       },
       __self: this
     }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["Input"], {
@@ -2544,13 +2635,13 @@ class Registration extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Componen
       placeholder: "Parola belirleyin",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 90
+        lineNumber: 135
       },
       __self: this
     })), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["FormGroup"], {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 98
+        lineNumber: 143
       },
       __self: this
     }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["Input"], {
@@ -2563,7 +2654,14 @@ class Registration extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Componen
       placeholder: "Parolan\u0131z\u0131 teyit edin",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 99
+        lineNumber: 144
+      },
+      __self: this
+    }), __jsx(_components_ValidationError__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      message: this.state.validationErrors.passwordConfirm,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 151
       },
       __self: this
     })), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_3__["Button"], {
@@ -2573,33 +2671,33 @@ class Registration extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Componen
       block: true,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 108
+        lineNumber: 154
       },
       __self: this
     }, "Kayd\u0131 Tamamla")), __jsx("hr", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 115
+        lineNumber: 161
       },
       __self: this
     }), __jsx("p", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 116
+        lineNumber: 162
       },
       __self: this
     }, "Zaten \xFCye misiniz?", __jsx(next_link__WEBPACK_IMPORTED_MODULE_4___default.a, {
       href: '/login',
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 117
+        lineNumber: 163
       },
       __self: this
     }, __jsx("a", {
       className: "text-dark",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 118
+        lineNumber: 164
       },
       __self: this
     }, " Giri\u015F yap\u0131n")))))));
@@ -2713,6 +2811,23 @@ const logout = () => {
 
   window.localStorage.setItem('logout', _babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0___default()());
   next_router__WEBPACK_IMPORTED_MODULE_1___default.a.push('/login');
+};
+
+/***/ }),
+
+/***/ "./utils/validations.js":
+/*!******************************!*\
+  !*** ./utils/validations.js ***!
+  \******************************/
+/*! exports provided: isEmail */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isEmail", function() { return isEmail; });
+const isEmail = input => {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(input).toLowerCase());
 };
 
 /***/ }),

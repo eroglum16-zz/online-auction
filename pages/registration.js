@@ -5,9 +5,11 @@ import { Button, Form, FormGroup, Label, Input, FormText, Alert } from 'reactstr
 import Link from "next/link";
 import axios from "axios";
 import Router from 'next/router';
+import ValidationError from "../components/ValidationError";
 
-var bcrypt = require('bcryptjs');
-var salt = bcrypt.genSaltSync(10);
+const bcrypt    = require('bcryptjs');
+const salt      = bcrypt.genSaltSync(10);
+const validator = require('../utils/validations');
 
 class Registration extends React.Component{
     constructor(props) {
@@ -17,6 +19,7 @@ class Registration extends React.Component{
             email: '',
             password: '',
             passwordConfirm: '',
+            validationErrors: {},
             alertMessage: ''
         };
         this.handleRegistration = this.handleRegistration.bind(this);
@@ -27,31 +30,71 @@ class Registration extends React.Component{
         const value = target.value;
         const name = target.name;
 
+        let errors = this.state.validationErrors;
+        errors[name] = '';
+
         this.setState({
-            [name]: value
+            [name]: value,
+            validationErrors: errors
         });
     }
     handleRegistration(){
         const apiConfig = require('../api-config');
         const url = apiConfig.serverUrl + '/user/save';
-        if (this.state.password !== this.state.passwordConfirm){
-            document.getElementById('password-confirm').style.border = '1px solid red';
-            return;
-        }
-        var pass = bcrypt.hashSync(this.state.password, salt);
+        let pass = bcrypt.hashSync(this.state.password, salt);
+
+        let validated = this.validate();
+        if(!validated) return;
         axios.post(url, {
             nameSurname: this.state.nameSurname,
             email: this.state.email,
             password: pass
         })
-            .then(function (response) {
-                Router.push('/login?registered=true');
+            .then((response) => {
+                Router.push('/login?registered=' + this.state.email);
             })
-            .catch(function (error) {
-                this.setState({
-                    alertMessage: error.response.data.message
-                });
-            }.bind(this));
+            .catch( (error) => {
+                if (error.response){
+                    this.setState({
+                        alertMessage: error.response.data.message
+                    });
+                }else{
+                    this.setState({
+                        alertMessage: 'Sunucudaki bir çalışmadan dolayı şu anda kayıt gerçekleştirilemiyor.'
+                    });
+                }
+            });
+    }
+    validate(){
+        let validated   = true;
+        let errors      = this.state.validationErrors;
+
+        if (this.state.nameSurname.length < 5){
+            validated = false;
+            errors.nameSurname = "Ad soyad alanına daha uzun bir değer girmelisiniz."
+        }else if (this.state.nameSurname.length > 50){
+            validated = false;
+            errors.nameSurname = "Ad soyad en fazla 50 karakterdan oluşabilir."
+        }
+
+        if(!validator.isEmail(this.state.email)){
+            validated = false;
+            errors.email = "Geçerli bir email adresi girmediniz."
+        }
+
+        if(this.state.password !== this.state.passwordConfirm){
+            validated = false;
+            errors.passwordConfirm = "Şifreler eşleşmiyor."
+        }
+
+        if (!validated)
+            this.setState({
+                validationErrors: errors,
+                password: '',
+                passwordConfirm: ''
+            });
+
+        return validated;
     }
     render() {
         return (
@@ -76,6 +119,7 @@ class Registration extends React.Component{
                                            onChange={this.handleInputChange}
                                            id="nameSurname"
                                            placeholder="Adınızı ve soyadınızı girin " />
+                                    <ValidationError message={this.state.validationErrors.nameSurname} />
                                 </FormGroup>
                                 <FormGroup>
                                     <Input bsSize="lg"
@@ -85,6 +129,7 @@ class Registration extends React.Component{
                                            onChange={this.handleInputChange}
                                            id="email"
                                            placeholder="Email adresinizi girin" />
+                                    <ValidationError message={this.state.validationErrors.email} />
                                 </FormGroup>
                                 <FormGroup>
                                     <Input bsSize="lg"
@@ -103,6 +148,7 @@ class Registration extends React.Component{
                                            onChange={this.handleInputChange}
                                            id="password-confirm"
                                            placeholder="Parolanızı teyit edin" />
+                                    <ValidationError message={this.state.validationErrors.passwordConfirm} />
                                 </FormGroup>
 
                                 <Button color="secondary"

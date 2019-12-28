@@ -8,7 +8,7 @@ import socketIOClient from 'socket.io-client';
 import React from "react";
 
 const apiConfig = require('../api-config');
-const socket = socketIOClient(apiConfig.serverUrl);
+const socket    = socketIOClient(apiConfig.serverUrl);
 
 class Index extends React.Component{
     constructor(props) {
@@ -42,7 +42,7 @@ class Index extends React.Component{
                 });
             })
             .catch(function (error) {
-                if(token) this.setState({
+                if(!error.response) this.setState({
                     serverDown: true
                 });
                 console.log(error);
