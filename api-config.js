@@ -1,6 +1,8 @@
-exports.serverUrl = 'http://localhost:3030';
+export const serverUrl = 'http://localhost:3030';
 
-exports.defaultCity = {
+export const productImageBase = serverUrl + '/images/products/';
+
+export const defaultCity = {
     city: "İller",
     code: 0,
     districts: [

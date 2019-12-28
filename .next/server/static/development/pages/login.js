@@ -88,7 +88,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -97,11 +97,17 @@ module.exports =
 /*!***********************!*\
   !*** ./api-config.js ***!
   \***********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: serverUrl, productImageBase, defaultCity */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-exports.serverUrl = 'http://localhost:3030';
-exports.defaultCity = {
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "serverUrl", function() { return serverUrl; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "productImageBase", function() { return productImageBase; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultCity", function() { return defaultCity; });
+const serverUrl = 'http://localhost:3030';
+const productImageBase = serverUrl + '/images/products/';
+const defaultCity = {
   city: "İller",
   code: 0,
   districts: ["İl Seçin"]
@@ -2703,7 +2709,7 @@ const logout = () => {
 
 /***/ }),
 
-/***/ 4:
+/***/ 3:
 /*!******************************!*\
   !*** multi ./pages/login.js ***!
   \******************************/

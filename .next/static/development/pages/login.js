@@ -4,11 +4,17 @@
 /*!***********************!*\
   !*** ./api-config.js ***!
   \***********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: serverUrl, productImageBase, defaultCity */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-exports.serverUrl = 'http://localhost:3030';
-exports.defaultCity = {
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "serverUrl", function() { return serverUrl; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "productImageBase", function() { return productImageBase; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultCity", function() { return defaultCity; });
+var serverUrl = 'http://localhost:3030';
+var productImageBase = serverUrl + '/images/products/';
+var defaultCity = {
   city: "İller",
   code: 0,
   districts: ["İl Seçin"]
@@ -37702,7 +37708,7 @@ var logout = function logout() {
 
 /***/ }),
 
-/***/ 3:
+/***/ 0:
 /*!**********************************************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2Flogin&absolutePagePath=%2FUsers%2Fmert%2FDesktop%2FI%CC%87TU%CC%88%2FFall%202019%2FBitirme%2FProject%2Fpages%2Flogin.js ***!
   \**********************************************************************************************************************************************************************/
@@ -37725,5 +37731,5 @@ module.exports = dll_b35e09dc2ca94ac6d9c1;
 
 /***/ })
 
-},[[3,"static/runtime/webpack.js","styles"]]]);
+},[[0,"static/runtime/webpack.js","styles"]]]);
 //# sourceMappingURL=login.js.map

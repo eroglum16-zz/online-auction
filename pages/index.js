@@ -2,8 +2,10 @@ import Layout from "../components/AppLayout";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import ItemCard from "../components/ItemCard";
 import { getToken, guest } from '../utils/auth'
+import { Alert } from 'reactstrap';
 import axios from "axios";
 import socketIOClient from 'socket.io-client';
+import React from "react";
 
 const apiConfig = require('../api-config');
 const socket = socketIOClient(apiConfig.serverUrl);
@@ -15,9 +17,12 @@ class Index extends React.Component{
         this.getUser(token);
         this.getActiveSales();
         this.state = {
-            loggedIn: token ? true : false,
-            user: {},
-            sales: []
+            loggedIn: !!token,
+            user: {
+                nameSurname: ""
+            },
+            sales: [],
+            serverDown: false
         }
     }
     componentDidMount() {
@@ -37,6 +42,9 @@ class Index extends React.Component{
                 });
             })
             .catch(function (error) {
+                if(token) this.setState({
+                    serverDown: true
+                });
                 console.log(error);
             }.bind(this));
     }
@@ -60,11 +68,20 @@ class Index extends React.Component{
                 <div className="container bg-white" style={{ padding:'3%', marginTop:'3%'}}>
                     <h2> Online Açık Arttırma Uygulaması</h2>
                     <hr/>
-                    <p style={{fontFamily:'verdana', fontSize:'17px', marginBottom:'50px'}}>
-                        Ürünlerinizi platformumuzda açık arttırmaya sunabilir, veya aktif açık arttırmalara
-                        katılarak değerli ürünleri alma fırsatı yakalayabilirsiniz. Aşağıdaki ürünlerden ilginizi çekeni seçerek
-                        satışa giderseniz teklifte bulunabilirsiniz.
-                    </p>
+                    {
+                        this.state.serverDown ?
+                            <Alert style={{fontFamily:'verdana', fontSize:'17px'}} color="info">
+                                Sunucularımızdaki sorundan dolayı hizmet veremiyoruz. Çok yakında geri döneceğiz.
+                                Anlayışınız için teşekkür ederiz.
+                            </Alert>
+                            :
+                            <p style={{fontFamily:'verdana', fontSize:'17px', marginBottom:'50px'}}>
+                                Ürünlerinizi platformumuzda açık arttırmaya sunabilir, veya aktif açık arttırmalara
+                                katılarak değerli ürünleri alma fırsatı yakalayabilirsiniz. Aşağıdaki ürünlerden ilginizi çekeni seçerek
+                                satışa giderseniz teklifte bulunabilirsiniz.
+                            </p>
+                    }
+
                     <hr></hr>
                     <div className="row">
                         {sales}

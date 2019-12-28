@@ -56,6 +56,7 @@ class Sell extends React.Component{
     }
     componentDidMount() {
         getUser(this.props.token).then(user => {
+            if(!user) Router.push('/index');
             this.setState({
                 user: user
             });

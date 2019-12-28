@@ -155,8 +155,6 @@ class AuctionDetail extends React.Component{
             })
             .catch((error) => {
                 console.log(error);
-                //if(!error.response) Router.push('/index');
-                //if(error.response.status === 404) Router.push('/index');
             })
     }
     render() {
