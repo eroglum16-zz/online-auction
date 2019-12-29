@@ -21,8 +21,10 @@ class Login extends React.Component{
             email: this.props.registered ? this.props.registered : '',
             password: ''
         }
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleLogin = this.handleLogin.bind(this);
+        this.handleInputChange      = this.handleInputChange.bind(this);
+        this.handleLogin            = this.handleLogin.bind(this);
+        this.handlePasswordEnter    = this.handlePasswordEnter.bind(this);
+        this.handleEmailEnter       = this.handleEmailEnter.bind(this);
     }
     handleInputChange(event) {
         const target = event.target;
@@ -32,6 +34,16 @@ class Login extends React.Component{
         this.setState({
             [name]: value
         });
+    }
+    handleEmailEnter(event) {
+        if (event.key === 'Enter') {
+            document.getElementById('password').focus();
+        }
+    }
+    handlePasswordEnter(event) {
+        if (event.key === 'Enter') {
+            this.handleLogin();
+        }
     }
     handleLogin(){
         if(!this.validate()) return;
@@ -105,6 +117,7 @@ class Login extends React.Component{
                                            name="email"
                                            value={this.state.email}
                                            onChange={this.handleInputChange}
+                                           onKeyDown={this.handleEmailEnter}
                                            id="email"
                                            placeholder="Kayıtlı email adresiniz" />
                                 </FormGroup>
@@ -114,7 +127,9 @@ class Login extends React.Component{
                                            name="password"
                                            value={this.state.password}
                                            onChange={this.handleInputChange}
+                                           onKeyDown={this.handlePasswordEnter}
                                            id="password"
+                                           ref="password"
                                            placeholder="Parolanız" />
                                 </FormGroup>
                                 <p>

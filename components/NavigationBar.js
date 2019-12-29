@@ -71,6 +71,7 @@ class NavigationBar extends React.Component {
                                 name="search"
                                 id="exampleSearch"
                                 placeholder="arama yapın..."
+                                onKeyUp={this.props.handleSearch}
                             />
                         </NavItem>
                         { this.props.loggedIn ?

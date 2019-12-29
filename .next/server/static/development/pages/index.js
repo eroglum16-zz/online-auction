@@ -88,7 +88,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -127,13 +127,67 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _NavigationBar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NavigationBar */ "./components/NavigationBar.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "axios");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _ItemCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ItemCard */ "./components/ItemCard.js");
+/* harmony import */ var _SearchResult__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./SearchResult */ "./components/SearchResult.js");
 var _jsxFileName = "/Users/mert/Desktop/I\u0307TU\u0308/Fall 2019/Bitirme/Project/components/AppLayout.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement;
 
 
 
+
+
+
+const apiConfig = __webpack_require__(/*! ../api-config */ "./api-config.js");
+
 class Layout extends react__WEBPACK_IMPORTED_MODULE_1___default.a.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      searchResults: [],
+      searchString: "",
+      serverDown: false
+    };
+    this.handleSearch = this.handleSearch.bind(this);
+  }
+
+  handleSearch(event) {
+    const target = event.target;
+    const value = target.value;
+    this.setState({
+      searchString: value
+    });
+    this.doSearch(value);
+  }
+
+  doSearch(searchString) {
+    const url = apiConfig.serverUrl + '/sales?q=' + searchString;
+    axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(response => {
+      this.setState({
+        searchResults: response.data.sales
+      });
+    }).catch(error => {
+      if (!error.response) this.setState({
+        serverDown: true
+      });
+    });
+  }
+
   render() {
+    let sales = [];
+
+    if (this.state.searchString) {
+      sales = this.state.searchResults.map(sale => __jsx(_ItemCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        sale: sale,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 46
+        },
+        __self: this
+      }));
+    }
+
     return __jsx("div", {
       style: {
         backgroundColor: 'whitesmoke',
@@ -141,19 +195,29 @@ class Layout extends react__WEBPACK_IMPORTED_MODULE_1___default.a.Component {
       },
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 7
+        lineNumber: 50
       },
       __self: this
     }, __jsx(_NavigationBar__WEBPACK_IMPORTED_MODULE_0__["default"], {
       page: this.props.page,
       loggedIn: this.props.loggedIn,
       user: this.props.user,
+      handleSearch: this.handleSearch,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 8
+        lineNumber: 51
       },
       __self: this
-    }), this.props.children);
+    }), this.state.searchString ? __jsx(_SearchResult__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      searchString: this.state.searchString,
+      sales: sales,
+      serverDown: this.state.serverDown,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 56
+      },
+      __self: this
+    }) : this.props.children);
   }
 
 }
@@ -561,6 +625,7 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       name: "search",
       id: "exampleSearch",
       placeholder: "arama yap\u0131n...",
+      onKeyUp: this.props.handleSearch,
       __source: {
         fileName: _jsxFileName,
         lineNumber: 69
@@ -571,7 +636,7 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       inNavbar: true,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 77
+        lineNumber: 78
       },
       __self: this
     }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["DropdownToggle"], {
@@ -580,7 +645,7 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       caret: true,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 78
+        lineNumber: 79
       },
       __self: this
     }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__["FontAwesomeIcon"], {
@@ -588,21 +653,21 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 79
+        lineNumber: 80
       },
       __self: this
     }), " ", this.props.user.nameSurname ? this.props.user.nameSurname : ''), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["DropdownMenu"], {
       right: true,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 81
+        lineNumber: 82
       },
       __self: this
     }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["DropdownItem"], {
       href: "/sales",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 82
+        lineNumber: 83
       },
       __self: this
     }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__["FontAwesomeIcon"], {
@@ -610,14 +675,14 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 83
+        lineNumber: 84
       },
       __self: this
     }), " Sat\u0131lanlar"), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["DropdownItem"], {
       href: "/purchases",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 85
+        lineNumber: 86
       },
       __self: this
     }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__["FontAwesomeIcon"], {
@@ -625,21 +690,21 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 86
+        lineNumber: 87
       },
       __self: this
     }), " Al\u0131nanlar"), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["DropdownItem"], {
       divider: true,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 88
+        lineNumber: 89
       },
       __self: this
     }), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["DropdownItem"], {
       onClick: this.handleLogout,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 89
+        lineNumber: 90
       },
       __self: this
     }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__["FontAwesomeIcon"], {
@@ -647,7 +712,7 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
       width: "16",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 90
+        lineNumber: 91
       },
       __self: this
     }), " \xC7\u0131k\u0131\u015F Yap"))) : '')));
@@ -656,6 +721,87 @@ class NavigationBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compone
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (NavigationBar);
+
+/***/ }),
+
+/***/ "./components/SearchResult.js":
+/*!************************************!*\
+  !*** ./components/SearchResult.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! reactstrap */ "reactstrap");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(reactstrap__WEBPACK_IMPORTED_MODULE_1__);
+var _jsxFileName = "/Users/mert/Desktop/I\u0307TU\u0308/Fall 2019/Bitirme/Project/components/SearchResult.js";
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+
+class SearchResult extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
+  render() {
+    return __jsx("div", {
+      className: "container bg-white",
+      style: {
+        padding: '3%',
+        marginTop: '3%'
+      },
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 7
+      },
+      __self: this
+    }, __jsx("h2", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 8
+      },
+      __self: this
+    }, " Arama sonu\xE7lar\u0131"), __jsx("hr", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 9
+      },
+      __self: this
+    }), this.props.serverDown ? __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Alert"], {
+      style: {
+        fontFamily: 'verdana',
+        fontSize: '17px'
+      },
+      color: "info",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 12
+      },
+      __self: this
+    }, "Sunucular\u0131m\u0131zdaki sorundan dolay\u0131 hizmet veremiyoruz. \xC7ok yak\u0131nda geri d\xF6nece\u011Fiz. Anlay\u0131\u015F\u0131n\u0131z i\xE7in te\u015Fekk\xFCr ederiz.") : __jsx("p", {
+      style: {
+        fontFamily: 'verdana',
+        fontSize: '17px',
+        marginBottom: '50px'
+      },
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 17
+      },
+      __self: this
+    }, this.props.searchString, " i\xE7in bulunan sonu\xE7lar:"), __jsx("div", {
+      className: "row",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 22
+      },
+      __self: this
+    }, this.props.sales));
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (SearchResult);
 
 /***/ }),
 
@@ -2834,7 +2980,7 @@ const logout = () => {
 
 /***/ }),
 
-/***/ 3:
+/***/ 5:
 /*!******************************!*\
   !*** multi ./pages/index.js ***!
   \******************************/
