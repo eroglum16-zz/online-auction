@@ -22308,7 +22308,7 @@ if (typeof WebSocket !== 'undefined') {
 
 if (typeof window === 'undefined') {
   try {
-    NodeWebSocket = __webpack_require__(/*! ws */ 7);
+    NodeWebSocket = __webpack_require__(/*! ws */ 3);
   } catch (e) { }
 }
 
@@ -48330,18 +48330,7 @@ var logout = function logout() {
 
 /***/ }),
 
-/***/ 7:
-/*!********************!*\
-  !*** ws (ignored) ***!
-  \********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/* (ignored) */
-
-/***/ }),
-
-/***/ 8:
+/***/ 0:
 /*!*****************************************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2F&absolutePagePath=%2FUsers%2Fmert%2FDesktop%2FI%CC%87TU%CC%88%2FFall%202019%2FBitirme%2FProject%2Fpages%2Findex.js ***!
   \*****************************************************************************************************************************************************************/
@@ -48350,6 +48339,17 @@ var logout = function logout() {
 
 module.exports = __webpack_require__(/*! next-client-pages-loader?page=%2F&absolutePagePath=%2FUsers%2Fmert%2FDesktop%2FI%CC%87TU%CC%88%2FFall%202019%2FBitirme%2FProject%2Fpages%2Findex.js! */"./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2F&absolutePagePath=%2FUsers%2Fmert%2FDesktop%2FI%CC%87TU%CC%88%2FFall%202019%2FBitirme%2FProject%2Fpages%2Findex.js!./");
 
+
+/***/ }),
+
+/***/ 3:
+/*!********************!*\
+  !*** ws (ignored) ***!
+  \********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
 
 /***/ }),
 
@@ -48364,5 +48364,5 @@ module.exports = dll_b35e09dc2ca94ac6d9c1;
 
 /***/ })
 
-},[[8,"static/runtime/webpack.js","styles"]]]);
+},[[0,"static/runtime/webpack.js","styles"]]]);
 //# sourceMappingURL=index.js.map

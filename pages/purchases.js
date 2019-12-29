@@ -1,10 +1,11 @@
 import Layout from "../components/AppLayout";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import SaleRow from "../components/SaleRow";
-import {Badge} from "reactstrap";
+import {Alert, Badge} from "reactstrap";
 import {auth, getUser} from "../utils/auth"
 import axios from "axios";
 import React from "react";
+import Link from "next/link";
 
 const apiConfig = require('../api-config');
 
@@ -39,16 +40,27 @@ class Purchases extends React.Component{
             });
     }
     render() {
-        const saleRows = this.state.purchases.map((purchase) =>
-            <SaleRow image={apiConfig.serverUrl + '/images/products/' + purchase.images[0]}
-                     type="p"
-                     name={purchase.title}
-                     id={purchase._id}
-                     description={purchase.description} />
-        );
+        let saleRows;
+        if (this.state.purchases.length === 0){
+            saleRows =
+                <Alert className="mt-3" color="info">
+                    Henüz ürün satın almadınız. Alışverişe
+                    <Link href='/index' >
+                        <a style={{color: 'inherit'}}> hemen başlayın. </a>
+                    </Link>
+                </Alert>
+        }else{
+            saleRows = this.state.purchases.map((purchase) =>
+                <SaleRow image={apiConfig.serverUrl + '/images/products/' + purchase.images[0]}
+                         type="p"
+                         name={purchase.title}
+                         id={purchase._id}
+                         description={purchase.description} />
+            );
+        }
         return (
             <Layout page="me" user={this.state.user} loggedIn={this.state.loggedIn}>
-                <div className="container bg-white" style={{ padding:'3%', marginTop:'3%'}}>
+                <div className="container bg-white" style={{ padding:'3%', marginTop:'3%', minHeight: '500px'}}>
                     <h2> Aldığınız Ürünler
                         <Badge className="ml-2" color="dark" pill>
                             {this.state.purchases.length}

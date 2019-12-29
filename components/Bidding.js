@@ -3,7 +3,9 @@ import {faLiraSign} from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import {Button, Fade, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText} from "reactstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Countdown from "react-countdown-now";
+//import Countdown from "react-countdown-now";
+import Countdown from "./Countdown";
+import Currency from "react-currency-formatter";
 
 class Bidding extends React.Component {
     render() {
@@ -68,10 +70,7 @@ class Bidding extends React.Component {
         }
         let biddingInfo;
         if(!this.props.finishedSale){
-            biddingInfo =
-                <p className="text-center mt-3 text-success">
-                    <Countdown date={this.props.endDate} />
-                </p>;
+            biddingInfo = <Countdown date={this.props.endDate} />
         }else if(this.props.maxBidder){
                 biddingInfo =
                     <p className="text-center mt-3 text-success">
@@ -87,7 +86,14 @@ class Bidding extends React.Component {
         let maxBidInfo = this.props.maxBid.amount in [null, 0] ?
             'Teklif veren olmadı.'
             :
-            this.props.maxBid.bidder.nameSurname + ': ' + this.props.maxBid.amount + '₺'
+            <span>
+                {this.props.maxBid.bidder.nameSurname}
+                : <Currency
+                    quantity={this.props.maxBid.amount}
+                    currency="TRY"
+                    pattern="##,### !"
+                />
+            </span>
             ;
         return (
             <div>
@@ -96,7 +102,6 @@ class Bidding extends React.Component {
                 <p className="text-center">
                     {maxBidInfo}
                 </p>
-
                 {biddingInput}
                 <hr/>
                 {biddingInfo}

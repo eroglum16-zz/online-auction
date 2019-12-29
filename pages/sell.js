@@ -364,6 +364,7 @@ class Sell extends React.Component{
                                     <ValidationError message={this.state.validationErrors.city} />
                                 </FormGroup>
                                 <Button color="danger"
+                                        className="mb-3"
                                         size="lg"
                                         type="submit"
                                         block>

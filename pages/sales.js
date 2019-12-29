@@ -1,10 +1,11 @@
 import Layout from "../components/AppLayout";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import SaleRow from "../components/SaleRow";
-import {Badge} from "reactstrap";
+import {Badge, Alert} from "reactstrap";
 import {auth, getUser} from "../utils/auth";
 import axios from "axios";
 import React from "react";
+import Link from "next/link";
 
 const apiConfig = require('../api-config');
 
@@ -40,16 +41,27 @@ class Sales extends React.Component{
     }
 
     render() {
-        const saleRows = this.state.sales.map((sale) =>
-            <SaleRow image={apiConfig.serverUrl + '/images/products/' + sale.images[0]}
-                     type="s"
-                     name={sale.title}
-                     id={sale._id}
-                     description={sale.description} />
-        );
+        let saleRows;
+        if (this.state.sales.length === 0){
+            saleRows =
+                <Alert className="mt-3" color="info">
+                    Henüz ürün satmadınız. Şimdi
+                    <Link href='/sell' >
+                        <a style={{color: 'inherit'}}> bir şey satın. </a>
+                    </Link>
+                </Alert>
+        }else{
+            saleRows = this.state.sales.map((sale) =>
+                <SaleRow image={apiConfig.serverUrl + '/images/products/' + sale.images[0]}
+                         type="s"
+                         name={sale.title}
+                         id={sale._id}
+                         description={sale.description} />
+            );
+        }
         return (
             <Layout page="me" user={this.state.user} loggedIn={this.state.loggedIn}>
-                <div className="container bg-white" style={{ padding:'3%', marginTop:'3%'}}>
+                <div className="container bg-white" style={{ padding:'3%', marginTop:'3%', minHeight: '500px'}}>
                     <h2> Sattığınız Ürünler
                         <Badge className="ml-2" color="dark" pill>
                             {this.state.sales.length}

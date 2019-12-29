@@ -8,6 +8,7 @@ import {faUser, faMoneyBill, faUsers, faThumbsUp, faCalendarAlt, faMapMarkerAlt 
 import axios from "axios";
 import { getToken } from '../../utils/auth';
 import socketIOClient from 'socket.io-client';
+import Currency from 'react-currency-formatter';
 
 const apiConfig = require('../../api-config');
 const defaults = require('../../utils/defaults');
@@ -76,7 +77,17 @@ class AuctionDetail extends React.Component{
             return;
         }
         if (this.state.bid < this.state.sale.firstPrice){
-            this.showFade("Başlangıç fiyatından düşük teklif veremezsiniz. (" + this.state.sale.firstPrice + "₺)");
+            const message =
+                <span>
+                    Başlangıç fiyatından düşük teklif veremezsiniz. (
+                    <Currency
+                        quantity={this.state.sale.firstPrice}
+                        currency="TRY"
+                        pattern="##,### !"
+                    />
+                    )
+                </span>
+            this.showFade(message);
             this.setState({
                 bid: ""
             });
@@ -256,7 +267,7 @@ class AuctionDetail extends React.Component{
                                      />
                         </div>
                     </div>
-                    <div className="row">
+                    <div className="row mt-3">
                         <div className="col-md-4">
                             <p className="mb-4 mt-4">
                                 <FontAwesomeIcon icon={faUser} width="16" /> <b>Satıcı: </b>
@@ -264,7 +275,12 @@ class AuctionDetail extends React.Component{
                             </p>
                             <p className="mb-4">
                                 <FontAwesomeIcon icon={faMoneyBill} width="16" /> <b>Başlangıç Fiyatı: </b>
-                                {this.state.sale.firstPrice}₺
+                                <Currency
+                                    quantity={this.state.sale.firstPrice}
+                                    currency="TRY"
+                                    pattern="##,### !"
+                                />
+
                             </p>
                         </div>
                         <div className="col-md-4">
