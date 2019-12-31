@@ -12,7 +12,8 @@ class ItemCard extends React.Component{
                         <Card  style={{boxShadow: '0px 10px 5px 0px #ccc'}}>
                             <Link href={'/a/[id]'} as={`/a/` + this.props.sale._id} >
                                 <a style={{color:'inherit', textDecoration:'none'}}>
-                                    <div style={{height: '230px', overflow:'hidden'}}>
+                                    <div style={{height: '200px', overflow:'hidden', display: 'flex',
+                                        alignItems: 'center'}}>
                                         <CardImg top style={{maxWidth: '100%'}}
                                                  src={apiConfig.serverUrl + '/images/products/' + this.props.sale.images[0]}
                                                  alt={this.props.sale.title} />

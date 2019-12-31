@@ -1,4 +1,4 @@
-export const serverUrl = 'http://localhost:3030';
+export const serverUrl = process.env.API || 'http://localhost:3030';
 
 export const productImageBase = serverUrl + '/images/products/';
 

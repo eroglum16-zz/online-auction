@@ -75,7 +75,7 @@ class Index extends React.Component{
                                 Anlayışınız için teşekkür ederiz.
                             </Alert>
                             :
-                            <p style={{fontFamily:'verdana', fontSize:'17px', marginBottom:'50px'}}>
+                            <p style={{fontFamily:'verdana', fontSize:'17px', marginBottom:'20px'}}>
                                 Ürünlerinizi platformumuzda açık arttırmaya sunabilir, veya aktif açık arttırmalara
                                 katılarak değerli ürünleri alma fırsatı yakalayabilirsiniz. Aşağıdaki ürünlerden ilginizi çekeni seçerek
                                 satışa giderseniz teklifte bulunabilirsiniz.

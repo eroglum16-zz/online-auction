@@ -132,11 +132,13 @@ class Login extends React.Component{
                                            ref="password"
                                            placeholder="Parolanız" />
                                 </FormGroup>
+                                { true ? false :
                                 <p>
                                     <Link href={'/forget-password'} >
                                         <a className="text-dark "> Parolamı unuttum</a>
                                     </Link>
                                 </p>
+                                }
                                 <Button color="secondary"
                                         size="lg"
                                         onClick={this.handleLogin}
