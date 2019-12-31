@@ -1,3 +1,5 @@
+import React from 'react';
+import LazyLoad from 'react-lazyload';
 import {Button, Card, CardBody, CardImg, CardSubtitle, CardTitle, Badge} from "reactstrap";
 import Link from "next/link";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -14,9 +16,11 @@ class ItemCard extends React.Component{
                                 <a style={{color:'inherit', textDecoration:'none'}}>
                                     <div style={{height: '200px', overflow:'hidden', display: 'flex',
                                         alignItems: 'center'}}>
-                                        <CardImg top style={{maxWidth: '100%'}}
-                                                 src={apiConfig.serverUrl + '/images/products/' + this.props.sale.images[0]}
-                                                 alt={this.props.sale.title} />
+                                        <LazyLoad height={200}>
+                                            <CardImg top style={{maxWidth: '100%'}}
+                                                     src={apiConfig.serverUrl + '/images/products/' + this.props.sale.images[0]}
+                                                     alt={this.props.sale.title} />
+                                        </LazyLoad>
                                     </div>
                                 </a>
                             </Link>
